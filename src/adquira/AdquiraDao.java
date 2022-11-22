@@ -105,7 +105,7 @@ public class AdquiraDao {
 			 sql += "Faturado,                                        ";
 			 sql += "Salvo_No_Sharepoint,                             ";
 			 sql += "Campo_Observacao_No_Sharepoint,                  ";
-			 sql += "Data_Extração,                                   ";
+			 sql += "Data_ExtraÃ§Ã£o,                                   ";
 			 sql += "Erro_No_Pedido		                  			  ";
 			 sql +=  ") VALUES (                                      ";
 			 sql += "?,                                               ";
@@ -134,12 +134,12 @@ public class AdquiraDao {
 			 statement.setString(7, String.valueOf(pedido.getValor()));
 			 statement.setString(8, pedido.getCnpjCliente());
 			 statement.setString(9, pedido.getComprador());
-			 statement.setString(10, pedido.isFaturado() ? "Sim" : "Não" );
+			 statement.setString(10, pedido.isFaturado() ? "Sim" : "Nao" );
 			 
-	         // Se o pedido não está faturado, mostro a informação se foi salvo no sharepoint
+	         // Se o pedido nï¿½o estï¿½ faturado, mostro a informaï¿½ï¿½o se foi salvo no sharepoint
 	         if (!pedido.isFaturado()) {
-	        	 statement.setString(11,  pedido.isSalvoNoSharepoint() ? "Sim" : "Não" );
-	         // Se o pedido está faturado, subentende-se que está salvo no sharepoint
+	        	 statement.setString(11,  pedido.isSalvoNoSharepoint() ? "Sim" : "Nao" );
+	         // Se o pedido estï¿½ faturado, subentende-se que estï¿½ salvo no sharepoint
 	         } else {
 	        	 statement.setString(11, "Sim");
 	         }
@@ -155,11 +155,11 @@ public class AdquiraDao {
 			 
 		 } catch (SQLException e) {
 			 
-			 String mensagem1 = "Houve algum problema no momento da inserção deste pedido: " + "\n";
+			 String mensagem1 = "Houve algum problema no momento da insercao deste pedido: " + "\n";
 			 
 			 mensagem1 += pedido.getContractNumber().getContrato() + ", " + pedido.getContractNumber().getNumero() + ", " + pedido.getNumero() + "\n";
 			 
-			 mensagem1 += "Esta é a mensagem de erro: "  + "\n";
+			 mensagem1 += "Esta e a mensagem de erro: "  + "\n";
 			 
 			 mensagem1 += e.getMessage() + "\n";
 			 

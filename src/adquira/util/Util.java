@@ -17,10 +17,10 @@ public class Util {
     public static Properties getProp() throws IOException {
         Properties props = new Properties();
         
-         String arquivoProperties = "D:/JOBS/AutomacaoAdquira/configuracoes/propriedadesAdquira.properties"; 
+        // String arquivoProperties = "D:/JOBS/AutomacaoAdquira/configuracoes/propriedadesAdquira.properties"; 
         // String arquivoProperties = "C:/Automacao Adquira/configuracoes/gerar relatorio pedidos.properties"; 
-        // Quando a integração do Sharepoibt estiver pronta, usar o arquivo propriedadesAdquira com Sharepoint.properties
-        // String arquivoProperties = "C:/Viegas/desenvolvimento/Selenium/arquivos propriedades/propriedadesAdquira.properties";
+        // Quando a integraï¿½ï¿½o do Sharepoibt estiver pronta, usar o arquivo propriedadesAdquira com Sharepoint.properties
+         String arquivoProperties = "C:/Viegas/desenvolvimento/Selenium/Adquira/configuracoes/propriedadesAdquira.properties";
          
         FileInputStream file = new FileInputStream(arquivoProperties);
         props.load(file);

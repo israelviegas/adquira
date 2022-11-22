@@ -128,20 +128,20 @@ public class AutomacaoAdquiraExtracaoPedidos {
     			criaDiretorio(subdiretorioRelatorioIncremental);
     			criaDiretorio(subdiretorioPdfsBaixados);
     			
-    			// Deleta os diretórios que possuírem data de criação anterior à data de 7 dias atrás
+    			// Deleta os diretï¿½rios que possuï¿½rem data de criaï¿½ï¿½o anterior ï¿½ data de 7 dias atrï¿½s
     			apagaDiretoriosDeRelatorios(Util.getValor("caminho.download.relatorios"));
     			
-    			// As vezes o diretório que armazena dados temporários do Chome simplesmente some, daí o Selenium dá pau na hora de chamar o browser
-    			// Com o método abaixo, crio essa pasta se ela não existir
+    			// As vezes o diretï¿½rio que armazena dados temporï¿½rios do Chome simplesmente some, daï¿½ o Selenium dï¿½ pau na hora de chamar o browser
+    			// Com o mï¿½todo abaixo, crio essa pasta se ela nï¿½o existir
     			criaDiretorioTemp();
     			
     			executaAutomacaoAdquiraSharepoint(driver);
             
     		} catch (Exception e) {
-    			gravarArquivo(diretorioLogs, "Erro Adquira" + " " + dataAtual, ".txt", e.getMessage(), "Ocorreu um erro na automação de extração de pedidos: ");
-    			inserirStatusExecucaoNoBanco("Adquira", dataAtualPlanilhaFinal, "Erro de execução do robô");
+    			gravarArquivo(diretorioLogs, "Erro Adquira" + " " + dataAtual, ".txt", e.getMessage(), "Ocorreu um erro na automacao de extracao de pedidos: ");
+    			inserirStatusExecucaoNoBanco("Adquira", dataAtualPlanilhaFinal, "Erro de execucao do robo");
     		} finally {
-    			//mensagemErro("Houve um problema na extração dos pedidos no Adquira\n");
+    			//mensagemErro("Houve um problema na extraï¿½ï¿½o dos pedidos no Adquira\n");
     			//fazerLogout(wait);
     			if (driver != null) {
     				driver.quit();
@@ -181,7 +181,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		// Abre e atualiza planilha de Pedidos Faturados
     		//abreAtualizaPlanilha(caminhoExecutavelPlanilhaPedidosFaturados);
     		
-    		System.out.println("Início: " + new SimpleDateFormat("dd_MM_yyyy HH_mm_ss").format(new Date()));
+    		System.out.println("Inicio: " + new SimpleDateFormat("dd_MM_yyyy HH_mm_ss").format(new Date()));
     		// Abrindo a URl do SharePoint somente para fazer o login
     		//fazerLoginSharepoint(driver, wait);
     		
@@ -189,7 +189,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		JavascriptExecutor js = (JavascriptExecutor) driver;
     		WebDriverWait wait = new WebDriverWait(driver, 60);
     		
-    		// Obtendo os contract numbers que estão na planilha
+    		// Obtendo os contract numbers que estï¿½o na planilha
     		//lerPlanilhaContractNumbers(Util.getValor("caminho.contract.numbers"));
     		
     		// Obtendo os contract numbers ativos do site do sharepoint
@@ -198,7 +198,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		// Obtendo os pedidos do site do sharepoint
     		recuperaPedidosSharepoint(driver, wait);
     		
-    		// Criando a lista de contract numbers sem repetição de números de contratos
+    		// Criando a lista de contract numbers sem repetiï¿½ï¿½o de nï¿½meros de contratos
     		criaListaContractNumbersDistintos();
     		
     		// Faz login no Adquira
@@ -207,7 +207,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		//acessarPaginaInicial(driver, wait);
     		
     		// Viegas
-    		// Trecho de código para testar com algum contract number específico
+    		// Trecho de cï¿½digo para testar com algum contract number especï¿½fico
     		/*
     		listaContractNumbers = new ArrayList<ContractNumber>();
     		ContractNumber contractNumberTeste = new ContractNumber();
@@ -223,25 +223,25 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		
     		if (extracaoPossuiPedidos) {
     			existemPedidos = true;
-    			//Move o relatório baixado do diretório relatorios para o diretório correto
+    			//Move o relatï¿½rio baixado do diretï¿½rio relatorios para o diretï¿½rio correto
     			moverArquivosEntreDiretorios(driver, wait, js, Util.getValor("caminho.download.relatorios") + "\\" + nomeRelatorioBaixado, subdiretorioRelatoriosBaixados);
     			Thread.sleep(5000);
     			
-    			// Lê o relatório baixado
+    			// Lï¿½ o relatï¿½rio baixado
     			lerRelatorioExcel(driver, wait, js, subdiretorioRelatoriosBaixados2 + "/" + nomeRelatorioBaixado, subdiretorioRelatoriosBaixados);
     			
     		}
     		
-    		// Se existem pedidos, faço a subtração da lista desses pedidos com a lista de pedidos faturados
-    		// Teremos então uma lista de pedidos não faturados, onde desses farei o download dos arquivos pdfs zipados e gero o relatório final
+    		// Se existem pedidos, faï¿½o a subtraï¿½ï¿½o da lista desses pedidos com a lista de pedidos faturados
+    		// Teremos entï¿½o uma lista de pedidos nï¿½o faturados, onde desses farei o download dos arquivos pdfs zipados e gero o relatï¿½rio final
     		if (existemPedidos) {
     			
     			if (listaPedidos != null && listaPedidos.size() > 0) {
     				
-    				// Crio a lista de pedidos não faturados inicialmente com a lista completa de pedidos
+    				// Crio a lista de pedidos nï¿½o faturados inicialmente com a lista completa de pedidos
     				listaPedidosNaoFaturados.addAll(listaPedidos);
     				
-    				// Obtenho a lista de pedidos faturados através da planilha
+    				// Obtenho a lista de pedidos faturados atravï¿½s da planilha
     				//lerPlanilhaPedidosFaturados(Util.getValor("caminho.pedidos.faturados")); 
     				
     				for (Pedido pedido : listaPedidos) {
@@ -276,9 +276,9 @@ public class AutomacaoAdquiraExtracaoPedidos {
     						
     					}
     					
-    					// Retirando os pedidos que contenham contract numbers inválidos
-    					// Crio uma lista auxiliar com os pedidos não faturados somente para retirar os pedidos
-    					// que contenham contract numbers inválidos da lista de pedidos não faturados.
+    					// Retirando os pedidos que contenham contract numbers invï¿½lidos
+    					// Crio uma lista auxiliar com os pedidos nï¿½o faturados somente para retirar os pedidos
+    					// que contenham contract numbers invï¿½lidos da lista de pedidos nï¿½o faturados.
     					listaPedidosNaoFaturadosAuxiliar.addAll(listaPedidosNaoFaturados);
     					
     					for (Pedido pedidoNaoFaturadoAuxiliar: listaPedidosNaoFaturadosAuxiliar) {
@@ -295,39 +295,39 @@ public class AutomacaoAdquiraExtracaoPedidos {
     						
     					}
     					
-    					// Verificando novamente, pois pode ser que não tenha nada na lista depois da retirada dos pedidos 
-    					// com contract numbers inválidos feito acima
+    					// Verificando novamente, pois pode ser que nï¿½o tenha nada na lista depois da retirada dos pedidos 
+    					// com contract numbers invï¿½lidos feito acima
     					if (listaPedidosNaoFaturados != null && listaPedidosNaoFaturados.size() > 0) {
     						
     						fazerLogoutAdquira(driver, wait);
     						
     						criarPedidosSharepoint(driver, wait, js, listaPedidosNaoFaturados);
     						
-    						// Cria arquivo excel que conterá o relatório final contendo os pedidos não faturados
-    						// Também armazenará se o pedido foi salvo no sharepoint
-    						gravarArquivo(subdiretorioRelatorioFinal2, "relatorio final" + " " + dataAtual, ".xls", "", "");
+    						// Cria arquivo excel que conterï¿½ o relatï¿½rio final contendo os pedidos nï¿½o faturados
+    						// Tambï¿½m armazenarï¿½ se o pedido foi salvo no sharepoint
+    						//gravarArquivo(subdiretorioRelatorioFinal2, "relatorio final" + " " + dataAtual, ".xls", "", "");
     						
-    						// Gera o relatório final de pedidos não faturados
-    						String relatorioFinal = subdiretorioRelatorioFinal2 + "/" + "relatorio final" + " " + dataAtual + ".xls";
-    						criarRelatorioFinal(relatorioFinal);
+    						// Gera o relatï¿½rio final de pedidos nï¿½o faturados
+    						//String relatorioFinal = subdiretorioRelatorioFinal2 + "/" + "relatorio final" + " " + dataAtual + ".xls";
+    						//criarRelatorioFinal(relatorioFinal);
     						
-    						// Gera o relatório incremental de pedidos faturados e não faturados
-    						String relatorioIncremental = subdiretorioRelatorioIncremental + "/" + "relatorio incremental" + ".xls";
-    						// Se o relatório não existir, crio um novo
-    						if (!existeArquivo(relatorioIncremental)) {
-    							// Não vou criar o relatório em excel por enquanto, pois já está sendo gravado no banco
+    						// Gera o relatï¿½rio incremental de pedidos faturados e nï¿½o faturados
+    						//String relatorioIncremental = subdiretorioRelatorioIncremental + "/" + "relatorio incremental" + ".xls";
+    						// Se o relatï¿½rio nï¿½o existir, crio um novo
+    						//if (!existeArquivo(relatorioIncremental)) {
+    							// Nï¿½o vou criar o relatï¿½rio em excel por enquanto, pois jï¿½ estï¿½ sendo gravado no banco
     							//criarRelatorioFinal(relatorioIncremental);
-    							// Se o relatório existir, o incremento
-    						} else {
-    							// Não vou criar o relatório em excel por enquanto, pois já está sendo gravado no banco
+    							// Se o relatï¿½rio existir, o incremento
+    						//} else {
+    							// Nï¿½o vou criar o relatï¿½rio em excel por enquanto, pois jï¿½ estï¿½ sendo gravado no banco
     							//preenchePlanilhaRelatorioIncremental(relatorioIncremental);
-    						}
+    						//}
     						
-    						// Insere no banco a lista contendo todos os pedidos não faturados
+    						// Insere no banco a lista contendo todos os pedidos nï¿½o faturados
     						inserePedidosNoBanco();
     						
-    						// Cria arquivo contendo a data e hora da extração dos pedidos no Adquira
-    						// Ele será usado pela automação do sharepoint
+    						// Cria arquivo contendo a data e hora da extraï¿½ï¿½o dos pedidos no Adquira
+    						// Ele serï¿½ usado pela automaï¿½ï¿½o do sharepoint
     						//gravarArquivo(getValor("caminho.diretorio.relatorios"), "data e hora dos pedidos para o sharepoint", ".txt", dataAtual, "data.hora.pedidos.para.sharepoint=");
     						
     						// Encontrando a quantidade de pedidos salvos no sharepoint
@@ -400,7 +400,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		
     		gravarArquivo(diretorioLogs, "Resultado Adquira" + " " + dataAtual, ".txt", "", mensagemResultadoAdquira);
     		
-    		// Grava na tabela Tb_Historico_Execucao_Robos o serviço, data e hora e status da execução
+    		// Grava na tabela Tb_Historico_Execucao_Robos o serviï¿½o, data e hora e status da execuï¿½ï¿½o
     		inserirStatusExecucaoNoBanco("Adquira", dataAtualPlanilhaFinal, mensagemResultadoAdquira);
     		
     		//mensagemSucesso();
@@ -416,14 +416,14 @@ public class AutomacaoAdquiraExtracaoPedidos {
 			
 		} catch (Exception e) {
 			contadorExecutaAutomacaoAdquiraSharepoint ++;
-			// Executo até 20 vezes se der erro no executaAutomacaoAdquiraSharepoint
-			if (contadorExecutaAutomacaoAdquiraSharepoint <= 20) {
+			// Executo atï¿½ 10 vezes se der erro no executaAutomacaoAdquiraSharepoint
+			if (contadorExecutaAutomacaoAdquiraSharepoint <= 10) {
 				
-				System.out.println("Deu erro no método executaAutomacaoAdquiraSharepoint, tentativa de acerto: " + contadorExecutaAutomacaoAdquiraSharepoint);
+				System.out.println("Deu erro no metodo executaAutomacaoAdquiraSharepoint, tentativa de acerto: " + contadorExecutaAutomacaoAdquiraSharepoint);
 				executaAutomacaoAdquiraSharepoint(driver);
 			
 			} else {
-				throw new Exception("Ocorreu um erro no método executaAutomacaoAdquiraSharepoint: " + e);
+				throw new Exception("Ocorreu um erro no mï¿½todo executaAutomacaoAdquiraSharepoint: " + e);
 		    }
 
 		}
@@ -474,7 +474,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 		   		criaDiretorio(caminhoTemp);
 		    		
 		   	} catch (Exception e) {
-		   		System.out.println("Deu erro na criação do diretório Temp: " + e.getMessage());
+		   		System.out.println("Deu erro na criaï¿½ï¿½o do diretï¿½rio Temp: " + e.getMessage());
 		   	}
 
 	   }
@@ -498,13 +498,13 @@ public class AutomacaoAdquiraExtracaoPedidos {
         if (!sucesso) {
         	contadorErrosMoverArquivos++;
         	
-            // Tento mover o arquivo por até 20 vezes
+            // Tento mover o arquivo por atï¿½ 20 vezes
             if (contadorErrosMoverArquivos <= 20) {
             	
-				System.out.println("Deu erro no método moverArquivosEntreDiretorios, tentativa de acerto: " + contadorErrosMoverArquivos);
-				// Está dando erro de logout no servidor
-				// O botão de logout está ficando escondido
-				// então retirarei o logout e o login por enquanto
+				System.out.println("Deu erro no mï¿½todo moverArquivosEntreDiretorios, tentativa de acerto: " + contadorErrosMoverArquivos);
+				// Estï¿½ dando erro de logout no servidor
+				// O botï¿½o de logout estï¿½ ficando escondido
+				// entï¿½o retirarei o logout e o login por enquanto
 				fazerLogoutAdquira(driver, wait);
 				fazerLoginAdquira(driver, wait, js);
 				//acessarPaginaInicial(driver, wait);
@@ -512,7 +512,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 				moverArquivosEntreDiretorios(driver, wait, js, caminhoArquivoOrigem, caminhoDiretorioDestino);
             
             } else {
-            	throw new Exception("Ocorreu um erro no momento de mover o relatório " + caminhoArquivoOrigem + " para " + caminhoDiretorioDestino);
+            	throw new Exception("Ocorreu um erro no momento de mover o relatï¿½rio " + caminhoArquivoOrigem + " para " + caminhoDiretorioDestino);
             }
         	
         }
@@ -563,7 +563,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 	        if (diretorio.exists() && diretorio.isDirectory()) {
 	        	sucesso = true;
 	        	
-	        	//lista os nomes dos diretórios
+	        	//lista os nomes dos diretï¿½rios
 				String itens [] = diretorio.list();
 				
 				if (itens != null && itens.length > 0) {
@@ -577,7 +577,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 							Long dataModificacaoPasta =  FileUtils.lastModified(pasta);
 							Date dataModificacaoPasta2 = new Date(dataModificacaoPasta);
 							
-							// Se existirem diretórios com a data anterior à data de 7 dias atrás, os deleto
+							// Se existirem diretï¿½rios com a data anterior ï¿½ data de 7 dias atrï¿½s, os deleto
 							if (dataModificacaoPasta2.before(dataAntes7Dias)) {
 								FileUtils.deleteQuietly(pasta);
 							}
@@ -620,7 +620,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 	            
 	        	Robot robot = new Robot();
 	            // Comando que pressiona as teclas CTRL + ALT + F5 que
-	            // que é usado para atualizar a planilha
+	            // que ï¿½ usado para atualizar a planilha
 	            robot.keyPress(KeyEvent.VK_CONTROL);
 	            robot.keyPress(KeyEvent.VK_ALT);
 	            robot.keyPress(KeyEvent.VK_F5);
@@ -630,7 +630,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 	            Thread.sleep(20000);
 	            
 	           // Comando que pressiona as teclas CTRL + S que
-	           // que é usado para salvar a planilha
+	           // que ï¿½ usado para salvar a planilha
 	            robot.keyPress(KeyEvent.VK_CONTROL);
 	            robot.keyPress(KeyEvent.VK_S);
 	            robot.keyRelease(KeyEvent.VK_CONTROL);
@@ -656,9 +656,9 @@ public class AutomacaoAdquiraExtracaoPedidos {
 				List<Pedido> listaPedidosDoBanco = new ArrayList<Pedido>();
 				for (Pedido pedidosFaturadosNaoFaturados : listaPedidosNaoFaturados) {
 					
-					// Converto os valores de null para espaço em branco para gravar branco no banco e não dar problema
-					// no futuro relatório do sharepoint da Accenture que teremos
-					// Esse relatório de sharepoint da Accenture será gerado através do banco
+					// Converto os valores de null para espaï¿½o em branco para gravar branco no banco e nï¿½o dar problema
+					// no futuro relatï¿½rio do sharepoint da Accenture que teremos
+					// Esse relatï¿½rio de sharepoint da Accenture serï¿½ gerado atravï¿½s do banco
 					Util.converteValorNullParaEspacoEmBranco(pedidosFaturadosNaoFaturados);
 					
 					preencherMensagemDeErroNoPedido(pedidosFaturadosNaoFaturados);
@@ -667,8 +667,8 @@ public class AutomacaoAdquiraExtracaoPedidos {
 					listaPedidosDoBanco = adquiraDao.recuperaPedidos(pedidosFaturadosNaoFaturados);
 					boolean inserePedidoNoBanco = true;
 					
-					// Recupero pedidos do banco para não inserir de novo pedidos que tenham as mesmas mensagens do campo Erro_No_Pedido
-					// e que também não possuam o mesmo número de Contract Number
+					// Recupero pedidos do banco para nï¿½o inserir de novo pedidos que tenham as mesmas mensagens do campo Erro_No_Pedido
+					// e que tambï¿½m nï¿½o possuam o mesmo nï¿½mero de Contract Number
 					if (listaPedidosDoBanco != null && !listaPedidosDoBanco.isEmpty()) {
 						
 						for (Pedido pedidoDoBanco : listaPedidosDoBanco) {
@@ -689,7 +689,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 						AdquiraDao adquiraDao2 = new AdquiraDao();
 						adquiraDao2.inserirPedido(pedidosFaturadosNaoFaturados);
 						contador++;
-						System.out.println("Inseri o pedido de número: " + contador + " de um total de " + listaPedidosNaoFaturados.size());
+						System.out.println("Inseri o pedido de nï¿½mero: " + contador + " de um total de " + listaPedidosNaoFaturados.size());
 					}
 					
 				}
@@ -723,7 +723,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
         emailAccenture.sendKeys(Util.getValor("emailAccenture"));
         Thread.sleep(1000);
         
-		// Clicar no botão Avançar
+		// Clicar no botï¿½o Avanï¿½ar
         wait.until(ExpectedConditions.elementToBeClickable(By.id("idSIButton9"))).click();
         
 		// Preenchendo dados da senha da Accenture
@@ -732,14 +732,14 @@ public class AutomacaoAdquiraExtracaoPedidos {
         senhaAccenture.sendKeys(Util.getValor("senhaAccenture"));
         Thread.sleep(1000);
         
-		// Clicar no botão de Sign in para fazer o login
+		// Clicar no botï¿½o de Sign in para fazer o login
         wait.until(ExpectedConditions.elementToBeClickable(By.id("submitButton"))).click();
         Thread.sleep(1000);
         
-		// Clicar no botão de Ignorar para lembrar o dispositivo
+		// Clicar no botï¿½o de Ignorar para lembrar o dispositivo
         wait.until(ExpectedConditions.elementToBeClickable(By.id("vipSkipBtn"))).click();
         
-		// Clicar no botão Sim para continuar conectado
+		// Clicar no botï¿½o Sim para continuar conectado
         wait.until(ExpectedConditions.elementToBeClickable(By.id("idSIButton9"))).click();
         Thread.sleep(3000);
 
@@ -752,7 +752,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 		driver.get(Util.getValor("url.sharepoint"));
 		Thread.sleep(1000);
         
-        System.out.println("Início Sharepoint: " + new SimpleDateFormat("dd_MM_yyyy HH_mm_ss").format(new Date()));
+        System.out.println("Inicio Sharepoint: " + new SimpleDateFormat("dd_MM_yyyy HH_mm_ss").format(new Date()));
         int cont = 0;
         
         contadorErros = 0;
@@ -790,14 +790,14 @@ public class AutomacaoAdquiraExtracaoPedidos {
 			campoBusca.sendKeys(Keys.RETURN);
 			Thread.sleep(1000);
 			
-			// Se existe o link Status, então a busca retornou resultados
+			// Se existe o link Status, entï¿½o a busca retornou resultados
 			try {
 				waitPedidoExistenteSharePoint.until( ExpectedConditions.visibilityOfElementLocated(By.xpath("(//a[contains(text(),'Status')])[2]")));
 				System.out.println("Achou pedido: " + pedido.getNumero() + " no sharepoint");
 				pedido.setSalvoNoSharepoint(true);
 				Thread.sleep(1000);
 			} catch (Exception e) {
-				System.out.println("Não achou pedido: " + pedido.getNumero() + " no sharepoint");
+				System.out.println("Nï¿½o achou pedido: " + pedido.getNumero() + " no sharepoint");
 				Thread.sleep(1000);
 			}
     		
@@ -810,7 +810,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 	
     public static void clickNoCampoCaps( WebDriverWait wait, String idCap) {
     	// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-    	// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+    	// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
     	try {
     		wait.until(ExpectedConditions.elementToBeClickable(By.id(idCap))).click();
     	}
@@ -821,7 +821,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     
     public static void clickNoCampoObservacao( WebDriverWait wait, String idObservacao) {
 		// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-		// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+		// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
 		try {
 			wait.until(ExpectedConditions.elementToBeClickable(By.id(idObservacao))).click();
 		}
@@ -841,11 +841,11 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span [text()='"+textoNewItem+"']"))).click();
     		Thread.sleep(3000);
     		
-    		// Botão para anexar arquivo
+    		// Botï¿½o para anexar arquivo
     		String textoBotaoAnexarArquivo = "Click here to attach a file";
     		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span [text()='"+textoBotaoAnexarArquivo+"']"))).click();
     		
-    		// Botão para escolher o arquivo para anexar
+    		// Botï¿½o para escolher o arquivo para anexar
     		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("FileAttachmentUpload"))).sendKeys(subdiretorioPdfsBaixados +"\\"+ pedido.getNumero() + ".pdf");
     		Thread.sleep(1000);
     		wait.until(ExpectedConditions.elementToBeClickable(By.id("DialogButton0"))).click();
@@ -856,10 +856,10 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		
     		String inicioIdCampos = "ctl00_ctl33_g_de9b44a5_3d1f_4e84_8896_8c3974a46081_FormControl0_";
     		
-    		// Campo Status Solicitação
+    		// Campo Status Solicitaï¿½ï¿½o
     		String idComboStatusSolicitacao = inicioIdCampos + "V1_I1_D1";
     		// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-    		// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+    		// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
     		try {
     			wait.until(ExpectedConditions.elementToBeClickable(By.id(idComboStatusSolicitacao))).click();
     		}
@@ -872,7 +872,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		String statusSolictacao = "Aberto";
     		boolean existeStatusSolicitacao = false;
     		// Verifico se existe o status no combo
-    		// Se não existir, lanço exceção
+    		// Se nï¿½o existir, lanï¿½o exceï¿½ï¿½o
     		int quantidadeElementosComboStatusSolicitacao  = elementosComboStatusSolicitacao.getOptions().size();
     		if (quantidadeElementosComboStatusSolicitacao > 0) {
     			for (WebElement elemento : elementosComboStatusSolicitacao.getOptions()) {
@@ -886,13 +886,13 @@ public class AutomacaoAdquiraExtracaoPedidos {
     			elementosComboStatusSolicitacao.selectByVisibleText(statusSolictacao);
     			Thread.sleep(5000);
     		} else {
-    			throw new Exception("Regra de preenchimento inválida. O campo Status Solicitação do Sharepoint não possui a opção " + statusSolictacao + "\n");
+    			throw new Exception("Regra de preenchimento invï¿½lida. O campo Status Solicitaï¿½ï¿½o do Sharepoint nï¿½o possui a opï¿½ï¿½o " + statusSolictacao + "\n");
     		}
     		
-    		// Campo Nº Ctro SAP TLF
+    		// Campo Nï¿½ Ctro SAP TLF
     		String idComboNumeroContrato = inicioIdCampos + "V1_I1_D3";
     		// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-    		// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+    		// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
     		try {
     			wait.until(ExpectedConditions.elementToBeClickable(By.id(idComboNumeroContrato))).click();
     		}
@@ -906,7 +906,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		String numeroContrato = pedido.getContractNumber().getNumero();
     		boolean existeNumeroContrato = false;
     		// Verifico se existe o status no combo
-    		// Se não existir, lanço exceção
+    		// Se nï¿½o existir, lanï¿½o exceï¿½ï¿½o
     		int quantidadeElementosComboNumeroContrato  = elementosComboNumeroContrato.getOptions().size();
     		if (quantidadeElementosComboNumeroContrato > 0) {
     			for (WebElement elemento : elementosComboNumeroContrato.getOptions()) {
@@ -920,13 +920,13 @@ public class AutomacaoAdquiraExtracaoPedidos {
     			elementosComboNumeroContrato.selectByVisibleText(numeroContrato);
     			Thread.sleep(5000);
     		} else {
-    			throw new Exception("Regra de preenchimento inválida. O campo Nº Ctro SAP TLF do Sharepoint não possui a opção " + numeroContrato + "\n");
+    			throw new Exception("Regra de preenchimento invï¿½lida. O campo Nï¿½ Ctro SAP TLF do Sharepoint nï¿½o possui a opï¿½ï¿½o " + numeroContrato + "\n");
     		}
     		
     		// Campo Contrato (Projeto)
     		String idComboContratoProjeto = inicioIdCampos + "V1_I1_D4";
     		// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-    		// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+    		// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
     		try {
     			wait.until(ExpectedConditions.elementToBeClickable(By.id(idComboContratoProjeto))).click();
     		}
@@ -939,20 +939,20 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		//String contratoProjeto = "Digital Factory";
     		//elementosComboContratoProjeto.selectByVisibleText(contratoProjeto);
     		int quantidadeElementosComboContratoProjeto = elementosComboContratoProjeto.getOptions().size();
-    		// Se tiver mais que um ou nenhum, lançarei exceção
-    		// Estou comparando com 2 porque todos os combos têm uma opção em branco
-    		// Também verifico se a segunda opção que é a que tem valor não está vazia ou em branco
+    		// Se tiver mais que um ou nenhum, lanï¿½arei exceï¿½ï¿½o
+    		// Estou comparando com 2 porque todos os combos tï¿½m uma opï¿½ï¿½o em branco
+    		// Tambï¿½m verifico se a segunda opï¿½ï¿½o que ï¿½ a que tem valor nï¿½o estï¿½ vazia ou em branco
     		if (quantidadeElementosComboContratoProjeto == 2 && elementosComboContratoProjeto.getOptions().get(1).getText() != null && !elementosComboContratoProjeto.getOptions().get(1).getText().isEmpty()) {
     			elementosComboContratoProjeto.selectByIndex(1);
     			Thread.sleep(5000);
     		} else {
-    			throw new Exception("Regra de preenchimento inválida. O campo Contrato (Projeto) do Sharepoint possui nenhum ou mais de um valor" + "\n");
+    			throw new Exception("Regra de preenchimento invï¿½lida. O campo Contrato (Projeto) do Sharepoint possui nenhum ou mais de um valor" + "\n");
     		}
     		
-    		// Campo Nº Contrato ACN
+    		// Campo Nï¿½ Contrato ACN
     		String idComboNumeroContratoACN = inicioIdCampos + "V1_I1_D5";
     		// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-    		// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+    		// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
     		try {
     			wait.until(ExpectedConditions.elementToBeClickable(By.id(idComboNumeroContratoACN))).click();
     		}
@@ -962,23 +962,23 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		WebElement comboNumeroContratoACN = driver.findElement(By.id(idComboNumeroContratoACN));
     		// Elementos do combo
     		Select elementosComboNumeroContratoACN  = new Select(comboNumeroContratoACN);
-    		// Se tiver mais que um ou nenhum, lançarei exceção
-    		// Estou comparando com 2 porque todos os combos têm uma opção em branco
-    		// Também verifico se a segunda opção que é a que tem valor não está vazia ou em branco
+    		// Se tiver mais que um ou nenhum, lanï¿½arei exceï¿½ï¿½o
+    		// Estou comparando com 2 porque todos os combos tï¿½m uma opï¿½ï¿½o em branco
+    		// Tambï¿½m verifico se a segunda opï¿½ï¿½o que ï¿½ a que tem valor nï¿½o estï¿½ vazia ou em branco
     		int quantidadeElementosComboNumeroContratoACN = elementosComboNumeroContratoACN.getOptions().size();
-    		// Estou comparando com 2 porque todos os combos têm uma opção em branco
-    		// Também verifico se a segunda opção que é a que tem valor não está vazia ou em branco
+    		// Estou comparando com 2 porque todos os combos tï¿½m uma opï¿½ï¿½o em branco
+    		// Tambï¿½m verifico se a segunda opï¿½ï¿½o que ï¿½ a que tem valor nï¿½o estï¿½ vazia ou em branco
     		if (quantidadeElementosComboNumeroContratoACN == 2 && elementosComboNumeroContratoACN.getOptions().get(1).getText() != null && !elementosComboNumeroContratoACN.getOptions().get(1).getText().isEmpty()) {
     			elementosComboNumeroContratoACN.selectByIndex(1);
     			Thread.sleep(5000);
     		} else {
-    			throw new Exception("Regra de preenchimento inválida. O campo Nº Contrato ACN do Sharepoint possui nenhum ou mais de um valor" + "\n");
+    			throw new Exception("Regra de preenchimento invï¿½lida. O campo Nï¿½ Contrato ACN do Sharepoint possui nenhum ou mais de um valor" + "\n");
     		}
     		
     		// Campo Service Group
     		String idComboServiceGroup = inicioIdCampos + "V1_I1_D6";
     		// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-    		// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+    		// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
     		try {
     			wait.until(ExpectedConditions.elementToBeClickable(By.id(idComboServiceGroup))).click();
     		}
@@ -990,25 +990,25 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		Select elementosComboServiceGroup  = new Select(comboServiceGroup);
     		int quantidadeElementosComboServiceGroup = elementosComboServiceGroup.getOptions().size();
     		// Se tiver um ou mais que um, seleciono o primeiro
-    		// Estou comparando com 2 porque todos os combos têm uma opção em branco
-    		// Também verifico se a segunda opção que é a que tem valor não está vazia ou em branco
+    		// Estou comparando com 2 porque todos os combos tï¿½m uma opï¿½ï¿½o em branco
+    		// Tambï¿½m verifico se a segunda opï¿½ï¿½o que ï¿½ a que tem valor nï¿½o estï¿½ vazia ou em branco
     		String mensagemComboServiceGroup = "";
     		if (quantidadeElementosComboServiceGroup >=2 && elementosComboServiceGroup.getOptions().get(1).getText() != null && !elementosComboServiceGroup.getOptions().get(1).getText().isEmpty()) {
-    			// Se existirem mais que uma opção, informo no campo de Observação que selecionei o primeiro
+    			// Se existirem mais que uma opï¿½ï¿½o, informo no campo de Observaï¿½ï¿½o que selecionei o primeiro
     			if (quantidadeElementosComboServiceGroup >=3) {
-    				mensagemComboServiceGroup = "O campo Service Group possui mais de um valor, neste caso o robô selecionou a primeira opção do combo.";
+    				mensagemComboServiceGroup = "O campo Service Group possui mais de um valor, neste caso o robo selecionou a primeira opcao do combo.";
     			}
     			//String serviceGroup = "Application Outsourcing (AO)";
     			elementosComboServiceGroup.selectByIndex(1);
     			Thread.sleep(5000);
     		} else {
-    			throw new Exception("Regra de preenchimento inválida. O campo Service Group do Sharepoint possui nenhum valor" + "\n");
+    			throw new Exception("Regra de preenchimento invalida. O campo Service Group do Sharepoint possui nenhum valor" + "\n");
     		}
     		
     		// Campo WBS
     		String idComboWBS = inicioIdCampos + "V1_I1_D7";
     		// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-    		// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+    		// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
     		try {
     			wait.until(ExpectedConditions.elementToBeClickable(By.id(idComboWBS))).click();
     		}
@@ -1021,21 +1021,21 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		// String wbs = "AZY71001";
     		// elementosComboWBS.selectByVisibleText(wbs);
     		int quantidadeElementosComboWBS  = elementosComboWBS.getOptions().size();
-    		// Se tiver mais que um ou nenhum, lançarei exceção
-    		// Estou comparando com 2 porque todos os combos têm uma opção em branco
-    		// Também verifico se a segunda opção que é a que tem valor não está vazia ou em branco
+    		// Se tiver mais que um ou nenhum, lanï¿½arei exceï¿½ï¿½o
+    		// Estou comparando com 2 porque todos os combos tï¿½m uma opï¿½ï¿½o em branco
+    		// Tambï¿½m verifico se a segunda opï¿½ï¿½o que ï¿½ a que tem valor nï¿½o estï¿½ vazia ou em branco
     		if (quantidadeElementosComboWBS == 2 && elementosComboWBS.getOptions().get(1).getText() != null && !elementosComboWBS.getOptions().get(1).getText().isEmpty()) {
     			elementosComboWBS.selectByIndex(1);
     			Thread.sleep(5000);
     		} else {
-    			throw new Exception("Regra de preenchimento inválida. O campo WBS do Sharepoint possui nenhum ou mais de um valor" + "\n");
+    			throw new Exception("Regra de preenchimento invalida. O campo WBS do Sharepoint possui nenhum ou mais de um valor" + "\n");
     		}
     		Thread.sleep(5000);
     		
     		// Campo Type
     		String idComboType = inicioIdCampos + "V1_I1_D8";
     		// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-    		// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+    		// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
     		try {
     			wait.until(ExpectedConditions.elementToBeClickable(By.id(idComboType))).click();
     		}
@@ -1048,17 +1048,17 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		// Se tiver mais que um, deixa em branco.
     		// Se tiver um, seleciona ele 
     		int quantidadeElementosComboType = elementosComboType.getOptions().size();
-    		// Estou comparando com 2 porque todos os combos têm uma opção em branco
+    		// Estou comparando com 2 porque todos os combos tï¿½m uma opï¿½ï¿½o em branco
     		if (quantidadeElementosComboType == 2) {
     			//String type = "AD";
     			elementosComboType.selectByIndex(1);
     			Thread.sleep(5000);
     		}
     		
-    		// Campo Serviço
+    		// Campo Serviï¿½o
     		String idComboServico = inicioIdCampos + "V1_I1_D9";
     		// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-    		// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+    		// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
     		try {
     			wait.until(ExpectedConditions.elementToBeClickable(By.id(idComboServico))).click();
     		}
@@ -1071,17 +1071,17 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		// Se tiver mais que um, deixa em branco.
     		// Se tiver um, seleciona ele 
     		int quantidadeElementosComboServico  = elementosComboServico.getOptions().size();
-    		// Estou comparando com 2 porque todos os combos têm uma opção em branco
+    		// Estou comparando com 2 porque todos os combos tï¿½m uma opï¿½ï¿½o em branco
     		if (quantidadeElementosComboServico == 2) {
     			//String servico = "Desenvolvimento - Capex";
     			elementosComboServico.selectByIndex(1);
     			Thread.sleep(5000);
     		}
     		
-    		// Campo Razão Social
+    		// Campo Razï¿½o Social
     		String idComboRazaoSocial = inicioIdCampos + "V1_I1_D10";
     		// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-    		// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+    		// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
     		try {
     			wait.until(ExpectedConditions.elementToBeClickable(By.id(idComboRazaoSocial))).click();
     		}
@@ -1091,7 +1091,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		WebElement comboRazaoSocial = driver.findElement(By.id(idComboRazaoSocial));
     		// Elementos do combo
     		Select elementosComboRazaoSocial = new Select(comboRazaoSocial);
-    		String razaoSocialSharepointTelefonica = "TELEFÔNICA BRASIL S/A";
+    		String razaoSocialSharepointTelefonica = "TELEFÃ”NICA BRASIL S/A";
     		String razaoSocialSharepointTerraNetworks = "TERRA NETWORKS BRASIL S.A.";
     		String razaoSocialAdquiraTelefonica = "Telefonica Brasil S.A";
     		String razaoSocialAdquiraTerraNetworks1 = "Terra Networks Brasil S.A";
@@ -1105,17 +1105,17 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		} else if (razaoSocialAdquiraTerraNetworks1.equalsIgnoreCase(razaoSocialAdquira) || razaoSocialAdquiraTerraNetworks2.equalsIgnoreCase(razaoSocialAdquira)) {
     			razaoSocial = razaoSocialSharepointTerraNetworks;
     		} else {
-    			throw new Exception("Regra de preenchimento inválida. A seguinte razão social do Adquira está diferente do Sharepoint : " + razaoSocial + "\n");
+    			throw new Exception("Regra de preenchimento invalida. A seguinte razï¿½o social do Adquira esta diferente do Sharepoint : " + razaoSocial + "\n");
     		}
     		
     		elementosComboRazaoSocial.selectByVisibleText(razaoSocial);
-    		//elementosComboRazaoSocial.selectByVisibleText("TELEFÔNICA BRASIL S/A");
+    		//elementosComboRazaoSocial.selectByVisibleText("TELEFÃ”NICA BRASIL S/A");
     		Thread.sleep(5000);
     		
     		// Campo CNPJ
     		String idComboCNPJ = inicioIdCampos + "V1_I1_D11";
     		// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-    		// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+    		// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
     		try {
     			wait.until(ExpectedConditions.elementToBeClickable(By.id(idComboCNPJ))).click();
     		}
@@ -1129,7 +1129,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		String cnpj = pedido.getCnpjCliente();
     		boolean existeCNPJ = false;
     		// Verifico se existe o status no combo
-    		// Se não existir, lanço exceção
+    		// Se nï¿½o existir, lanï¿½o exceï¿½ï¿½o
     		int quantidadeElementosComboCNPJ  = elementosComboCNPJ.getOptions().size();
     		if (quantidadeElementosComboCNPJ > 0) {
     			for (WebElement elemento : elementosComboCNPJ.getOptions()) {
@@ -1143,13 +1143,13 @@ public class AutomacaoAdquiraExtracaoPedidos {
     			elementosComboCNPJ.selectByVisibleText(cnpj);
     			Thread.sleep(5000);
     		} else {
-    			throw new Exception("Regra de preenchimento inválida. O campo CNPJ do Sharepoint não possui a opção " + cnpj + "\n");
+    			throw new Exception("Regra de preenchimento invalida. O campo CNPJ do Sharepoint nao possui a opcao " + cnpj + "\n");
     		}
     		
-    		// Campo Endereço
+    		// Campo Endereï¿½o
     		String idComboEndereco = inicioIdCampos + "V1_I1_D12";
     		// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-    		// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+    		// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
     		try {
     			wait.until(ExpectedConditions.elementToBeClickable(By.id(idComboEndereco))).click();
     		}
@@ -1159,23 +1159,23 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		WebElement comboEndereco = driver.findElement(By.id(idComboEndereco));
     		// Elementos do combo
     		Select elementosComboEndereco = new Select(comboEndereco);
-    		// String endereco = "Av. Engenheiro Luiz Carlos Berrini, 1376 - Cidade Monções - São Paulo - SP - CEP: 04571-936";
+    		// String endereco = "Av. Engenheiro Luiz Carlos Berrini, 1376 - Cidade Monï¿½ï¿½es - Sï¿½o Paulo - SP - CEP: 04571-936";
     		// elementosComboEndereco.selectByVisibleText(endereco);
     		int quantidadeElementosComboEndereco  = elementosComboEndereco.getOptions().size();
-    		// Se tiver mais que um ou nenhum, lançarei exceção
-    		// Estou comparando com 2 porque todos os combos têm uma opção em branco
-    		// Também verifico se a segunda opção que é a que tem valor não está vazia ou em branco
+    		// Se tiver mais que um ou nenhum, lanï¿½arei exceï¿½ï¿½o
+    		// Estou comparando com 2 porque todos os combos tï¿½m uma opï¿½ï¿½o em branco
+    		// Tambï¿½m verifico se a segunda opï¿½ï¿½o que ï¿½ a que tem valor nï¿½o estï¿½ vazia ou em branco
     		if (quantidadeElementosComboEndereco == 2 && elementosComboEndereco.getOptions().get(1).getText() != null && !elementosComboEndereco.getOptions().get(1).getText().isEmpty()) {
     			elementosComboEndereco.selectByIndex(1);
     			Thread.sleep(5000);
     		} else {
-    			throw new Exception("Regra de preenchimento inválida. O campo Endereço do Sharepoint possui nenhum ou mais de um valor" + "\n");
+    			throw new Exception("Regra de preenchimento invalida. O campo Endereco do Sharepoint possui nenhum ou mais de um valor" + "\n");
     		}
     		
-    		// Campo Nº Cliente
+    		// Campo Nï¿½ Cliente
     		String idComboNumeroCliente = inicioIdCampos + "V1_I1_D13";
     		// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-    		// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+    		// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
     		try {
     			wait.until(ExpectedConditions.elementToBeClickable(By.id(idComboNumeroCliente))).click();
     		}
@@ -1188,20 +1188,20 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		// String numeroCliente = "10004184";
     		// elementosComboNumeroCliente.selectByVisibleText(numeroCliente);
     		int quantidadeElementosComboNumeroCliente  = elementosComboNumeroCliente.getOptions().size();
-    		// Se tiver mais que um ou nenhum, lançarei exceção
-    		// Estou comparando com 2 porque todos os combos têm uma opção em branco
-    		// Também verifico se a segunda opção que é a que tem valor não está vazia ou em branco
+    		// Se tiver mais que um ou nenhum, lanï¿½arei exceï¿½ï¿½o
+    		// Estou comparando com 2 porque todos os combos tï¿½m uma opï¿½ï¿½o em branco
+    		// Tambï¿½m verifico se a segunda opï¿½ï¿½o que ï¿½ a que tem valor nï¿½o estï¿½ vazia ou em branco
     		if (quantidadeElementosComboNumeroCliente == 2 && elementosComboNumeroCliente.getOptions().get(1).getText() != null && !elementosComboNumeroCliente.getOptions().get(1).getText().isEmpty()) {
     			elementosComboNumeroCliente.selectByIndex(1);
     			Thread.sleep(5000);
     		} else {
-    			throw new Exception("Regra de preenchimento inválida. O campo Nº Cliente do Sharepoint possui nenhum ou mais de um valor" + "\n");
+    			throw new Exception("Regra de preenchimento invalida. O campo Numero Cliente do Sharepoint possui nenhum ou mais de um valor" + "\n");
     		}
     		
     		// Campo Portal
     		String idComboPortal = inicioIdCampos + "V1_I1_D14";
     		// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-    		// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+    		// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
     		try {
     			wait.until(ExpectedConditions.elementToBeClickable(By.id(idComboPortal))).click();
     		}
@@ -1211,11 +1211,11 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		WebElement comboPortal = driver.findElement(By.id(idComboPortal));
     		// Elementos do combo
     		Select elementosComboPortal = new Select(comboPortal);
-    		// Sempre será esse valor, pois é de onde o robô está buscando as informações
+    		// Sempre serï¿½ esse valor, pois ï¿½ de onde o robï¿½ estï¿½ buscando as informaï¿½ï¿½es
     		String portal = "Adquira";
     		boolean existePortal = false;
     		// Verifico se existe o status no combo
-    		// Se não existir, lanço exceção
+    		// Se nï¿½o existir, lanï¿½o exceï¿½ï¿½o
     		int quantidadeElementosComboPortal  = elementosComboPortal.getOptions().size();
     		if (quantidadeElementosComboPortal > 0) {
     			for (WebElement elemento : elementosComboPortal.getOptions()) {
@@ -1229,15 +1229,15 @@ public class AutomacaoAdquiraExtracaoPedidos {
     			elementosComboPortal.selectByVisibleText(portal);
     			Thread.sleep(5000);
     		} else {
-    			throw new Exception("Regra de preenchimento inválida. O campo Portal do Sharepoint não possui a opção " + portal + "\n");
+    			throw new Exception("Regra de preenchimento invalida. O campo Portal do Sharepoint nao possui a opcao " + portal + "\n");
     		}
     		
     		// Campo Imposto
-    		// O campo imposto já aparece preenchido com a informação default Taxa 2
+    		// O campo imposto jï¿½ aparece preenchido com a informaï¿½ï¿½o default Taxa 2
     		/*
      	        String idComboImposto = inicioIdCampos + "V1_I1_CB15_textBox";
      	        // Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-     	        // Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+     	        // Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
      	        try {
      	        	wait.until(ExpectedConditions.elementToBeClickable(By.id(idComboImposto))).click();
      	        }
@@ -1255,7 +1255,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		// Campo Org. Vendas
     		String idComboOrgVendas = inicioIdCampos + "V1_I1_D16";
     		// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-    		// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+    		// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
     		try {
     			wait.until(ExpectedConditions.elementToBeClickable(By.id(idComboOrgVendas))).click();
     		}
@@ -1268,20 +1268,20 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		// String orgVendas = "1500 - San Pablo";
     		// elementosComboOrgVendas.selectByVisibleText(orgVendas);
     		int quantidadeElementosComboOrgVendas  = elementosComboOrgVendas.getOptions().size();
-    		// Se tiver mais que um ou nenhum, lançarei exceção
-    		// Estou comparando com 2 porque todos os combos têm uma opção em branco
-    		// Também verifico se a segunda opção que é a que tem valor não está vazia ou em branco
+    		// Se tiver mais que um ou nenhum, lanï¿½arei exceï¿½ï¿½o
+    		// Estou comparando com 2 porque todos os combos tï¿½m uma opï¿½ï¿½o em branco
+    		// Tambï¿½m verifico se a segunda opï¿½ï¿½o que ï¿½ a que tem valor nï¿½o estï¿½ vazia ou em branco
     		if (quantidadeElementosComboOrgVendas == 2 && elementosComboOrgVendas.getOptions().get(1).getText() != null && !elementosComboOrgVendas.getOptions().get(1).getText().isEmpty()) {
     			elementosComboOrgVendas.selectByIndex(1);
     			Thread.sleep(5000);
     		} else {
-    			throw new Exception("Regra de preenchimento inválida. O campo Org. Vendas do Sharepoint possui nenhum ou mais de um valor" + "\n");
+    			throw new Exception("Regra de preenchimento invalida. O campo Org. Vendas do Sharepoint possui nenhum ou mais de um valor" + "\n");
     		}
     		
-    		// Campo Código Empresa
+    		// Campo Cï¿½digo Empresa
     		String idComboCodigoEmpresa = inicioIdCampos + "V1_I1_D17";
     		// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-    		// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+    		// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
     		try {
     			wait.until(ExpectedConditions.elementToBeClickable(By.id(idComboCodigoEmpresa))).click();
     		}
@@ -1294,20 +1294,20 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		// String codigoEmpresa = "1500 - San Pablo";
     		// elementosComboCodigoEmpresa.selectByVisibleText(codigoEmpresa);
     		int quantidadeElementosComboCodigoEmpresa  = elementosComboCodigoEmpresa.getOptions().size();
-    		// Se tiver mais que um ou nenhum, lançarei exceção
-    		// Estou comparando com 2 porque todos os combos têm uma opção em branco
-    		// Também verifico se a segunda opção que é a que tem valor não está vazia ou em branco
+    		// Se tiver mais que um ou nenhum, lanï¿½arei exceï¿½ï¿½o
+    		// Estou comparando com 2 porque todos os combos tï¿½m uma opï¿½ï¿½o em branco
+    		// Tambï¿½m verifico se a segunda opï¿½ï¿½o que ï¿½ a que tem valor nï¿½o estï¿½ vazia ou em branco
     		if (quantidadeElementosComboCodigoEmpresa == 2 && elementosComboCodigoEmpresa.getOptions().get(1).getText() != null && !elementosComboCodigoEmpresa.getOptions().get(1).getText().isEmpty()) {
     			elementosComboCodigoEmpresa.selectByIndex(1);
     			Thread.sleep(5000);
     		} else {
-    			throw new Exception("Regra de preenchimento inválida. O campo Código Empresa do Sharepoint possui nenhum ou mais de um valor" + "\n");
+    			throw new Exception("Regra de preenchimento invalida. O campo Codigo Empresa do Sharepoint possui nenhum ou mais de um valor" + "\n");
     		}
     		
-    		// Campo Código Material
+    		// Campo Cï¿½digo Material
     		String idComboCodigoMaterial = inicioIdCampos + "V1_I1_D18";
     		// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-    		// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+    		// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
     		try {
     			wait.until(ExpectedConditions.elementToBeClickable(By.id(idComboCodigoMaterial))).click();
     		}
@@ -1320,20 +1320,20 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		// String codigoMaterial = "J0104";
     		// elementosComboCodigoMaterial.selectByVisibleText(codigoMaterial);
     		int quantidadeElementosComboCodigoMaterial  = elementosComboCodigoMaterial.getOptions().size();
-    		// Se tiver mais que um ou nenhum, lançarei exceção
-    		// Estou comparando com 2 porque todos os combos têm uma opção em branco
-    		// Também verifico se a segunda opção que é a que tem valor não está vazia ou em branco
+    		// Se tiver mais que um ou nenhum, lanï¿½arei exceï¿½ï¿½o
+    		// Estou comparando com 2 porque todos os combos tï¿½m uma opï¿½ï¿½o em branco
+    		// Tambï¿½m verifico se a segunda opï¿½ï¿½o que ï¿½ a que tem valor nï¿½o estï¿½ vazia ou em branco
     		if (quantidadeElementosComboCodigoMaterial == 2 && elementosComboCodigoMaterial.getOptions().get(1).getText() != null && !elementosComboCodigoMaterial.getOptions().get(1).getText().isEmpty()) {
     			elementosComboCodigoMaterial.selectByIndex(1);
     			Thread.sleep(5000);
     		} else {
-    			throw new Exception("Regra de preenchimento inválida. O campo Código Material do Sharepoint possui nenhum ou mais de um valor" + "\n");
+    			throw new Exception("Regra de preenchimento invalida. O campo Codigo Material do Sharepoint possui nenhum ou mais de um valor" + "\n");
     		}
     		
     		// Campo ISS
     		String idComboISS = inicioIdCampos + "V1_I1_D19";
     		// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-    		// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+    		// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
     		try {
     			wait.until(ExpectedConditions.elementToBeClickable(By.id(idComboISS))).click();
     		}
@@ -1346,20 +1346,20 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		// String iss = "0.029";
     		// elementosComboISS.selectByVisibleText(iss);
     		int quantidadeElementosComboISS  = elementosComboISS.getOptions().size();
-    		// Se tiver mais que um ou nenhum, lançarei exceção
-    		// Estou comparando com 2 porque todos os combos têm uma opção em branco
-    		// Também verifico se a segunda opção que é a que tem valor não está vazia ou em branco
+    		// Se tiver mais que um ou nenhum, lanï¿½arei exceï¿½ï¿½o
+    		// Estou comparando com 2 porque todos os combos tï¿½m uma opï¿½ï¿½o em branco
+    		// Tambï¿½m verifico se a segunda opï¿½ï¿½o que ï¿½ a que tem valor nï¿½o estï¿½ vazia ou em branco
     		if (quantidadeElementosComboISS == 2 && elementosComboISS.getOptions().get(1).getText() != null && !elementosComboISS.getOptions().get(1).getText().isEmpty()) {
     			elementosComboISS.selectByIndex(1);
     			Thread.sleep(5000);
     		} else {
-    			throw new Exception("Regra de preenchimento inválida. O campo ISS do Sharepoint possui nenhum ou mais de um valor" + "\n");
+    			throw new Exception("Regra de preenchimento invalida. O campo ISS do Sharepoint possui nenhum ou mais de um valor" + "\n");
     		}
     		
     		// Campo PIS
     		String idComboPIS = inicioIdCampos + "V1_I1_D20";
     		// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-    		// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+    		// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
     		try {
     			wait.until(ExpectedConditions.elementToBeClickable(By.id(idComboPIS))).click();
     		}
@@ -1372,20 +1372,20 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		// String pis = "0.0065";
     		// elementosComboPIS.selectByVisibleText(pis);
     		int quantidadeElementosComboPIS  = elementosComboPIS.getOptions().size();
-    		// Se tiver mais que um ou nenhum, lançarei exceção
-    		// Estou comparando com 2 porque todos os combos têm uma opção em branco
-    		// Também verifico se a segunda opção que é a que tem valor não está vazia ou em branco
+    		// Se tiver mais que um ou nenhum, lanï¿½arei exceï¿½ï¿½o
+    		// Estou comparando com 2 porque todos os combos tï¿½m uma opï¿½ï¿½o em branco
+    		// Tambï¿½m verifico se a segunda opï¿½ï¿½o que ï¿½ a que tem valor nï¿½o estï¿½ vazia ou em branco
     		if (quantidadeElementosComboPIS == 2 && elementosComboPIS.getOptions().get(1).getText() != null && !elementosComboPIS.getOptions().get(1).getText().isEmpty()) {
     			elementosComboPIS.selectByIndex(1);
     			Thread.sleep(5000);
     		} else {
-    			throw new Exception("Regra de preenchimento inválida. O campo PIS do Sharepoint possui nenhum ou mais de um valor" + "\n");
+    			throw new Exception("Regra de preenchimento invalida. O campo PIS do Sharepoint possui nenhum ou mais de um valor" + "\n");
     		}
     		
     		// Campo Cofins
     		String idComboCofins = inicioIdCampos + "V1_I1_D21";
     		// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-    		// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+    		// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
     		try {
     			wait.until(ExpectedConditions.elementToBeClickable(By.id(idComboCofins))).click();
     		}
@@ -1398,20 +1398,20 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		// String cofins = "0.03";
     		// elementosComboCofins.selectByVisibleText(cofins);
     		int quantidadeElementosComboCofins  = elementosComboCofins.getOptions().size();
-    		// Se tiver mais que um ou nenhum, lançarei exceção
-    		// Estou comparando com 2 porque todos os combos têm uma opção em branco
-    		// Também verifico se a segunda opção que é a que tem valor não está vazia ou em branco
+    		// Se tiver mais que um ou nenhum, lanï¿½arei exceï¿½ï¿½o
+    		// Estou comparando com 2 porque todos os combos tï¿½m uma opï¿½ï¿½o em branco
+    		// Tambï¿½m verifico se a segunda opï¿½ï¿½o que ï¿½ a que tem valor nï¿½o estï¿½ vazia ou em branco
     		if (quantidadeElementosComboCofins == 2 && elementosComboCofins.getOptions().get(1).getText() != null && !elementosComboCofins.getOptions().get(1).getText().isEmpty()) {
     			elementosComboCofins.selectByIndex(1);
     			Thread.sleep(5000);
     		} else {
-    			throw new Exception("Regra de preenchimento inválida. O campo Cofins do Sharepoint possui nenhum ou mais de um valor" + "\n");
+    			throw new Exception("Regra de preenchimento invalida. O campo Cofins do Sharepoint possui nenhum ou mais de um valor" + "\n");
     		}
     		
-    		// Campo Código Taxa
+    		// Campo Cï¿½digo Taxa
     		String idComboCodigoTaxa = inicioIdCampos + "V1_I1_D22";
     		// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-    		// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+    		// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
     		try {
     			wait.until(ExpectedConditions.elementToBeClickable(By.id(idComboCodigoTaxa))).click();
     		}
@@ -1424,23 +1424,23 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		// String codigoTaxa = "H0";
     		// elementosComboCodigoTaxa.selectByVisibleText(codigoTaxa);
     		int quantidadeElementosComboCodigoTaxa  = elementosComboCodigoTaxa.getOptions().size();
-    		// Se tiver mais que um ou nenhum, lançarei exceção
-    		// Estou comparando com 2 porque todos os combos têm uma opção em branco
-    		// Também verifico se a segunda opção que é a que tem valor não está vazia ou em branco
+    		// Se tiver mais que um ou nenhum, lanï¿½arei exceï¿½ï¿½o
+    		// Estou comparando com 2 porque todos os combos tï¿½m uma opï¿½ï¿½o em branco
+    		// Tambï¿½m verifico se a segunda opï¿½ï¿½o que ï¿½ a que tem valor nï¿½o estï¿½ vazia ou em branco
     		if (quantidadeElementosComboCodigoTaxa == 2 && elementosComboCodigoTaxa.getOptions().get(1).getText() != null && !elementosComboCodigoTaxa.getOptions().get(1).getText().isEmpty()) {
     			elementosComboCodigoTaxa.selectByIndex(1);
     			Thread.sleep(5000);
     		} else {
-    			throw new Exception("Regra de preenchimento inválida. O campo Código Taxa do Sharepoint possui nenhum ou mais de um valor" + "\n");
+    			throw new Exception("Regra de preenchimento invalida. O campo Codigo Taxa do Sharepoint possui nenhum ou mais de um valor" + "\n");
     		}
     		
     		// Campo Total VAT
-    		// Campo em branco, não permite preenchimento
+    		// Campo em branco, nï¿½o permite preenchimento
     		
     		// Campo PO/Pedido
     		String idPoPedido = inicioIdCampos + "V1_I1_T24";
     		// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-    		// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+    		// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
     		try {
     			wait.until(ExpectedConditions.elementToBeClickable(By.id(idPoPedido))).click();
     		}
@@ -1465,7 +1465,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		// Campo Recebimento PO
     		String idRecebimentoPO = inicioIdCampos + "V1_I1_T27";
     		// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-    		// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+    		// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
     		try {
     			wait.until(ExpectedConditions.elementToBeClickable(By.id(idRecebimentoPO))).click();
     		}
@@ -1488,7 +1488,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		// Campo Prazo de Pgto
     		String idComboPrazoDePgto = inicioIdCampos + "V1_I1_D29";
     		// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-    		// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+    		// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
     		try {
     			wait.until(ExpectedConditions.elementToBeClickable(By.id(idComboPrazoDePgto))).click();
     		}
@@ -1501,14 +1501,14 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		// String prazoDePgto  = "75";
     		// elementosComboPrazoDePgto.selectByVisibleText(prazoDePgto);
     		int quantidadeElementosComboPrazoDePgto  = elementosComboPrazoDePgto.getOptions().size();
-    		// Se tiver mais que um ou nenhum, lançarei exceção
-    		// Estou comparando com 2 porque todos os combos têm uma opção em branco
-    		// Também verifico se a segunda opção que é a que tem valor não está vazia ou em branco
+    		// Se tiver mais que um ou nenhum, lanï¿½arei exceï¿½ï¿½o
+    		// Estou comparando com 2 porque todos os combos tï¿½m uma opï¿½ï¿½o em branco
+    		// Tambï¿½m verifico se a segunda opï¿½ï¿½o que ï¿½ a que tem valor nï¿½o estï¿½ vazia ou em branco
     		if (quantidadeElementosComboPrazoDePgto == 2 && elementosComboPrazoDePgto.getOptions().get(1).getText() != null && !elementosComboPrazoDePgto.getOptions().get(1).getText().isEmpty()) {
     			elementosComboPrazoDePgto.selectByIndex(1);
     			Thread.sleep(5000);
     		} else {
-    			throw new Exception("Regra de preenchimento inválida. O campo Prazo de Pgto do Sharepoint possui nenhum ou mais de um valor" + "\n");
+    			throw new Exception("Regra de preenchimento invalida. O campo Prazo de Pgto do Sharepoint possui nenhum ou mais de um valor" + "\n");
     		}
     		
     		// Campo CAP
@@ -1524,7 +1524,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     			
     		} else if (inputTextCap.length() > 255 && inputTextCap.length() <= 510) {
     			
-    			// O campo CAP só aceita 255 caracteres, então vou verificar o tamanho e se passar, insiro o restante no campo Observação
+    			// O campo CAP sï¿½ aceita 255 caracteres, entï¿½o vou verificar o tamanho e se passar, insiro o restante no campo Observaï¿½ï¿½o
     			String primeiraParteCap = inputTextCap.substring(0, 255);
     			preencheCampoCap(driver, wait, js, idCap, primeiraParteCap);
     			
@@ -1532,11 +1532,11 @@ public class AutomacaoAdquiraExtracaoPedidos {
     			String idObservacao = inicioIdCampos + "V1_I1_T32";
     			preencheuCapNaObservacao = true;
     			preencheCampoObservacao(driver, wait, js, idObservacao, segundaParteCap);
-    			pedido.setObservacaoSharepoint("Os CAPs deste pedido excederam 255 caracteres.Parte destes CAPs estão no campo CAP e outra parte está no campo Observação do Sharepoint. " + "CAP completo: " + inputTextCap);
+    			pedido.setObservacaoSharepoint("Os CAPs deste pedido excederam 255 caracteres.Parte destes CAPs estao no campo CAP e outra parte estï¿½ no campo Observacao do Sharepoint. " + "CAP completo: " + inputTextCap);
     			
     		} else {
-    			// Se o Cap for maior que 510, insiro 255 no Cap e os outros 255 no campo Observação.
-    			// Como ele é maior que 510 perderemos o restante da informação, então vou mostrar o Cap completo na base de dados
+    			// Se o Cap for maior que 510, insiro 255 no Cap e os outros 255 no campo Observaï¿½ï¿½o.
+    			// Como ele ï¿½ maior que 510 perderemos o restante da informaï¿½ï¿½o, entï¿½o vou mostrar o Cap completo na base de dados
     			String primeiraParteCap = inputTextCap.substring(0, 255);
     			preencheCampoCap(driver, wait, js, idCap, primeiraParteCap);
     			
@@ -1544,16 +1544,16 @@ public class AutomacaoAdquiraExtracaoPedidos {
     			String idObservacao = inicioIdCampos + "V1_I1_T32";
     			preencheuCapNaObservacao = true;
     			preencheCampoObservacao(driver, wait, js, idObservacao, segundaParteCap);
-    			pedido.setObservacaoSharepoint("Os CAPs deste pedido excederam 510 caracteres.Parte destes CAPs estão no campo CAP e outra parte está no campo Observação do Sharepoint. " + "CAP completo: " + inputTextCap);
+    			pedido.setObservacaoSharepoint("Os CAPs deste pedido excederam 510 caracteres.Parte destes CAPs estao no campo CAP e outra parte esta no campo Observacao do Sharepoint. " + "CAP completo: " + inputTextCap);
     			
     		}
     		
     		// Campo OI
-    		// Não precisa preencher
+    		// Nï¿½o precisa preencher
     		/*
     			String idOi = inicioIdCampos + "V1_I1_T31";
      	        // Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-     	        // Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+     	        // Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
      	        try {
      	        	wait.until(ExpectedConditions.elementToBeClickable(By.id(idOi))).click();
      	        }
@@ -1575,11 +1575,11 @@ public class AutomacaoAdquiraExtracaoPedidos {
     			Thread.sleep(5000);
     		 */
     		
-    		// Campo Observação
+    		// Campo Observaï¿½ï¿½o
     		String idObservacao = inicioIdCampos + "V1_I1_T32";
-    		// Não sei porque, mas mesmo preenchendo o campo CAPS o sharepoint estava dando erro quando eu tentava salvar.
-    		// O erro é como se o campo CAPS estivesse vazio.
-    		// Então percebi que se eu clicasse em outro campo e depois clicasse no campo CAPS de novo e novamente clicasse em outro campo, o erro sumia
+    		// Nï¿½o sei porque, mas mesmo preenchendo o campo CAPS o sharepoint estava dando erro quando eu tentava salvar.
+    		// O erro ï¿½ como se o campo CAPS estivesse vazio.
+    		// Entï¿½o percebi que se eu clicasse em outro campo e depois clicasse no campo CAPS de novo e novamente clicasse em outro campo, o erro sumia
     		clickNoCampoObservacao(wait, idObservacao);
     		Thread.sleep(1000);
     		clickNoCampoCaps(wait, idCap);
@@ -1605,7 +1605,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     				String idItem = "//input[@value='" + itemAdquira + "']";
     				
     				try {
-    					// Caso o número de itens do pedido ultrapasse os itens suportados pelo Sharepoint, entra no catch para não sair do preenchimento do resto do pedido
+    					// Caso o nï¿½mero de itens do pedido ultrapasse os itens suportados pelo Sharepoint, entra no catch para nï¿½o sair do preenchimento do resto do pedido
     					WebDriverWait waitItem = new WebDriverWait(driver, 5);
     					waitItem.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(idItem)));
     				} catch (Exception e) {
@@ -1615,7 +1615,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     				WebElement item = driver.findElement(By.xpath(idItem));
     				if (!item.isSelected ()) {					
     					// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-    					// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+    					// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
     					try {
     						wait.until(ExpectedConditions.elementToBeClickable(By.xpath(idItem))).click();
     						Thread.sleep(1000);
@@ -1633,11 +1633,11 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		Thread.sleep(5000);
     		
     		// Campo Nota Fiscal
-    		// Não precisa preencher
+    		// Nï¿½o precisa preencher
     		/*
     			String idNotaFiscal = inicioIdCampos + "V1_I1_T33";
      	        // Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-     	        // Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+     	        // Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
      	        try {
      	        	wait.until(ExpectedConditions.elementToBeClickable(By.id(idNotaFiscal))).click();
      	        }
@@ -1660,11 +1660,11 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		 */
     		
     		// Campo DMR
-    		// Não precisa preencher
+    		// Nï¿½o precisa preencher
     		/*
     			String idDmr = inicioIdCampos + "V1_I1_T34";
      	        // Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-     	        // Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+     	        // Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
      	        try {
      	        	wait.until(ExpectedConditions.elementToBeClickable(By.id(idDmr))).click();
      	        }
@@ -1687,11 +1687,11 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		 */
     		
     		// Campo Data da Nota
-    		// Não vamos preencher por enquanto
+    		// Nï¿½o vamos preencher por enquanto
     		/*
     			String idDataDaNota = inicioIdCampos + "V1_I1_T35";
      	        // Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-     	        // Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+     	        // Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
      	        try {
      	        	wait.until(ExpectedConditions.elementToBeClickable(By.id(idDataDaNota))).click();
      	        }
@@ -1716,7 +1716,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		// Campo Valor NFE
     		String idValorNFE = inicioIdCampos + "V1_I1_T37";
     		// Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-    		// Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+    		// Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
     		try {
     			wait.until(ExpectedConditions.elementToBeClickable(By.id(idValorNFE))).click();
     		}
@@ -1737,14 +1737,14 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		}
     		
     		// Campo Pgto. Previsto
-    		// Não precisa preencher
+    		// Nï¿½o precisa preencher
     		
     		// Campo Data do Pgto.
-    		// Não precisa preencher
+    		// Nï¿½o precisa preencher
     		/*
     			String idDataDoPgto = inicioIdCampos + "V1_I1_T39";
      	        // Estava dando o seguinte erro: org.openqa.selenium.StaleElementReferenceException: stale element reference: element is not attached to the page document
-     	        // Sempre que você enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que você está obtendo um erro
+     	        // Sempre que vocï¿½ enfrentar esse problema, apenas defina o elemento da web mais uma vez acima da linha em que vocï¿½ estï¿½ obtendo um erro
      	        try {
      	        	wait.until(ExpectedConditions.elementToBeClickable(By.id(idDataDoPgto))).click();
      	        }
@@ -1766,22 +1766,22 @@ public class AutomacaoAdquiraExtracaoPedidos {
     			Thread.sleep(5000);
     		 */
     		
-    		// Botão de Save
+    		// Botï¿½o de Save
     		String textoBotaoSave = "Save";
     		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span [text()='"+textoBotaoSave+"']"))).click();
     		pedido.setSalvoNoSharepoint(true);
     		
-    		// Botão de Close
+    		// Botï¿½o de Close
     		//String textoBotaoClose = "Close";
     		//wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span [text()='"+textoBotaoClose+"']"))).click();
     		
     		Thread.sleep(3000);
     		
 		} catch (Exception e) {
-			// Se der alguma exceção por conta das regras de preenchimento, gravo as mensagens em um arquivo e continuo o processamento dos demais
+			// Se der alguma exceï¿½ï¿½o por conta das regras de preenchimento, gravo as mensagens em um arquivo e continuo o processamento dos demais
 			String mensagemErro = e.toString();
-			if (mensagemErro.contains("Regra de preenchimento inválida")) {
-				// Usarei a informação de erro de preenchimento para mostrar no relatório final :)
+			if (mensagemErro.contains("Regra de preenchimento invalida")) {
+				// Usarei a informaï¿½ï¿½o de erro de preenchimento para mostrar no relatï¿½rio final :)
 				if (mensagemErro != null && !mensagemErro.isEmpty()) {
 					
 					if (mensagemErro.indexOf("java.lang.Exception") != -1) {
@@ -1841,15 +1841,15 @@ public class AutomacaoAdquiraExtracaoPedidos {
 
     }
    
-    // Opção de Restablecer Filtros
+    // Opï¿½ï¿½o de Restablecer Filtros
     public static void restabelecerFiltros(WebDriverWait wait) throws InterruptedException, IOException  {
-       	// Se for utilizar o método buscaAvancadaComUrl, o id da Opção de Restablecer Filtros será TID_CONTENTPANEL_supplier_SupplierWelcomePanel_BUTTON_RESET_FILTERS
-    	// Se for utilizar o método buscaAvancada, o id da Opção de Restablecer Filtros será TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_BUTTON_RESET_FILTERS
+       	// Se for utilizar o mï¿½todo buscaAvancadaComUrl, o id da Opï¿½ï¿½o de Restablecer Filtros serï¿½ TID_CONTENTPANEL_supplier_SupplierWelcomePanel_BUTTON_RESET_FILTERS
+    	// Se for utilizar o mï¿½todo buscaAvancada, o id da Opï¿½ï¿½o de Restablecer Filtros serï¿½ TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_BUTTON_RESET_FILTERS
     	try {
     		Thread.sleep(1000);
     		wait.until(ExpectedConditions.elementToBeClickable(By.id("TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_BUTTON_RESET_FILTERS"))).click();
 		} catch (Exception e) {
-			System.out.println("Não achou o id TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_BUTTON_RESET_FILTERS.");
+			System.out.println("Nao achou o id TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_BUTTON_RESET_FILTERS.");
 			System.out.println("Tentando o TID_CONTENTPANEL_supplier_SupplierWelcomePanel_BUTTON_RESET_FILTERS.");
 			wait.until(ExpectedConditions.elementToBeClickable(By.id("TID_CONTENTPANEL_supplier_SupplierWelcomePanel_BUTTON_RESET_FILTERS"))).click();
 		}
@@ -1857,10 +1857,10 @@ public class AutomacaoAdquiraExtracaoPedidos {
     	Thread.sleep(2000);
     }
     
-    // Botão Aplicar Filtros
+    // Botï¿½o Aplicar Filtros
     public static void aplicarFiltros(WebDriver driver, WebDriverWait wait, JavascriptExecutor js, String contractNumber) throws Exception  {
-       	// Se for utilizar o método buscaAvancadaComUrl, o id do Botão Aplicar Filtros será TID_CONTENTPANEL_supplier_SupplierWelcomePanel_BUTTON_APPLY_FILTERS
-    	// Se for utilizar o método buscaAvancada, o id do Botão Aplicar Filtros será TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_BUTTON_APPLY_FILTERS
+       	// Se for utilizar o mï¿½todo buscaAvancadaComUrl, o id do Botï¿½o Aplicar Filtros serï¿½ TID_CONTENTPANEL_supplier_SupplierWelcomePanel_BUTTON_APPLY_FILTERS
+    	// Se for utilizar o mï¿½todo buscaAvancada, o id do Botï¿½o Aplicar Filtros serï¿½ TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_BUTTON_APPLY_FILTERS
 		try {
 			
 			Thread.sleep(1000);
@@ -1872,14 +1872,14 @@ public class AutomacaoAdquiraExtracaoPedidos {
 				Thread.sleep(1000);
 				wait.until(ExpectedConditions.elementToBeClickable(By.id("TID_CONTENTPANEL_supplier_SupplierWelcomePanel_BUTTON_APPLY_FILTERS"))).click();
 			} catch (Exception e3) {
-				throw new Exception("Deu erro no botão TID_CONTENTPANEL_supplier_SupplierWelcomePanel_BUTTON_APPLY_FILTERS: " + e3);
+				throw new Exception("Deu erro no botao TID_CONTENTPANEL_supplier_SupplierWelcomePanel_BUTTON_APPLY_FILTERS: " + e3);
 			}
 			
 		}
 		Thread.sleep(2000);
     }
     
-    // Opção de Aceitar Cookies
+    // Opï¿½ï¿½o de Aceitar Cookies
     public static void aceitarCookies(WebDriverWait wait) throws InterruptedException, IOException  {
     	wait.until(ExpectedConditions.elementToBeClickable(By.id("TID_DIV_COOKIESDISCLAIMERBAR_BUTTON_ACCEPT"))).click();
     	Thread.sleep(3000);
@@ -1887,7 +1887,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     
     // Poup-up Tela Inicial
     public static void popUpTelaInicial(WebDriverWait wait) throws InterruptedException, IOException  {
-    	// Marca opção para não voltar a ver
+    	// Marca opï¿½ï¿½o para nï¿½o voltar a ver
     	wait.until(ExpectedConditions.elementToBeClickable(By.id("TID_CONTENTPANEL_supplier_SupplierWelcomePanel_DIALOGWINDOW_carouselDialog_CHECKBOX_doNotShowAgain"))).click();
     	Thread.sleep(1000);
     	
@@ -1898,45 +1898,45 @@ public class AutomacaoAdquiraExtracaoPedidos {
     }
 
     
-    // Opção de Busca Avançada
-    // Se for usar esse método, alguns botões terão os ids alterados.Para saber quais são os ids, procure nos comentários por buscaAvancadaComUrl
-    // Se for usar o método buscaAvancada, a ordem de execução dos try catch abaixo dos comentários deve ser invertida
+    // Opï¿½ï¿½o de Busca Avanï¿½ada
+    // Se for usar esse mï¿½todo, alguns botï¿½es terï¿½o os ids alterados.Para saber quais sï¿½o os ids, procure nos comentï¿½rios por buscaAvancadaComUrl
+    // Se for usar o mï¿½todo buscaAvancada, a ordem de execuï¿½ï¿½o dos try catch abaixo dos comentï¿½rios deve ser invertida
     public static void buscaAvancadaComUrl(WebDriver driver, WebDriverWait wait) throws InterruptedException, IOException  {
     	driver.get(Util.getValor("url.adquira.pesquisa.avancada"));
     	Thread.sleep(5000);
     }
     
-    // Opção de Busca Avançada
-    // Se for usar esse método, alguns botões terão os ids alterados.Para saber quais são os ids, procure nos comentários por buscaAvancada
-    // Se for usar o método buscaAvancadaComUrl, a ordem de execução dos try catch abaixo dos comentários deve ser invertida
+    // Opï¿½ï¿½o de Busca Avanï¿½ada
+    // Se for usar esse mï¿½todo, alguns botï¿½es terï¿½o os ids alterados.Para saber quais sï¿½o os ids, procure nos comentï¿½rios por buscaAvancada
+    // Se for usar o mï¿½todo buscaAvancadaComUrl, a ordem de execuï¿½ï¿½o dos try catch abaixo dos comentï¿½rios deve ser invertida
     public static void buscaAvancada(WebDriverWait wait) throws InterruptedException, IOException  {
     	wait.until(ExpectedConditions.elementToBeClickable(By.id("TID_SEARCHBAR_BUTTON_ADVANCED_SEARCH"))).click();
     	Thread.sleep(3000);
     }
 
-    // Opção de Ver Notificações
+    // Opï¿½ï¿½o de Ver Notificaï¿½ï¿½es
     public static void verNotificacoes(WebDriverWait wait) throws InterruptedException, IOException  {
     	wait.until(ExpectedConditions.elementToBeClickable(By.id("TID_NOTIFICATIONBAR_BUTTON_CLOSE_ICON"))).click();
     	Thread.sleep(1000);
     }
     
     
-    // Opção de Ver Notificações
+    // Opï¿½ï¿½o de Ver Notificaï¿½ï¿½es
     public static void fazerLogoutAdquiraDepoisLoginDepoisBuscaAvancadaDepoisRestabeleceFiltros(WebDriver driver, WebDriverWait wait, JavascriptExecutor js) throws Exception  {
 		
-		// Está dando erro de logout no servidor
-		// O botão de logout está ficando escondido
-		// então retirarei o logout e o login por enquanto
+		// Estï¿½ dando erro de logout no servidor
+		// O botï¿½o de logout estï¿½ ficando escondido
+		// entï¿½o retirarei o logout e o login por enquanto
 		fazerLogoutAdquira(driver, wait);
 		
     	fazerLoginAdquira(driver, wait, js);
     	
     	//acessarPaginaInicial(driver, wait);
 	    
-		// Opção de Busca Avançada
+		// Opï¿½ï¿½o de Busca Avanï¿½ada
 		buscaAvancadaComUrl(driver, wait);
     	
-		// Opção de Restabelecer Filtros
+		// Opï¿½ï¿½o de Restabelecer Filtros
 		restabelecerFiltros(wait);
     	
     }
@@ -1986,7 +1986,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 		
 		try {
 			
-			// Deleto arquivos que existirem no diretório de relatórios
+			// Deleto arquivos que existirem no diretï¿½rio de relatï¿½rios
 			apagaArquivosDiretorioDeRelatorios(Util.getValor("caminho.download.relatorios"));
 			
 			// Baixa os pdfs de cada pedido
@@ -1995,7 +1995,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 			
 			if (pedidoNaoFaturado.isEncontrouPdfAnexo()) {
 				
-				//Move o pdf baixado do diretório relatorios para o diretório correto
+				//Move o pdf baixado do diretï¿½rio relatorios para o diretï¿½rio correto
 				moverArquivosEntreDiretorios2(Util.getValor("caminho.download.relatorios") + "\\" + nomeZipBaixado, subdiretorioPdfsBaixados);
 				Thread.sleep(1000);
 				
@@ -2008,13 +2008,13 @@ public class AutomacaoAdquiraExtracaoPedidos {
 			
 		} catch (Exception e) {
 			contadorErrosMoverArquivos ++;
-			// Executo até 50 vezes se der erro no aplicarFiltros
+			// Executo atï¿½ 50 vezes se der erro no aplicarFiltros
 			if (contadorErrosMoverArquivos <= 50) {
-				System.out.println("Deu erro no método fazerDownlodPdfPedidoMoveArquivosEDescompacta, tentativa de acerto: " + contadorErrosMoverArquivos);
+				System.out.println("Deu erro no metodo fazerDownlodPdfPedidoMoveArquivosEDescompacta, tentativa de acerto: " + contadorErrosMoverArquivos);
 				
-				// Está dando erro de logout no servidor
-				// O botão de logout está ficando escondido
-				// então retirarei o logout e o login por enquanto
+				// Estï¿½ dando erro de logout no servidor
+				// O botï¿½o de logout estï¿½ ficando escondido
+				// entï¿½o retirarei o logout e o login por enquanto
 				fazerLogoutAdquira(driver, wait);
 				
 				fazerLoginAdquira(driver, wait, js);
@@ -2024,10 +2024,10 @@ public class AutomacaoAdquiraExtracaoPedidos {
 				fazerDownlodPdfPedidoMoveArquivosEDescompacta(driver, wait, js, pedidoNaoFaturado, subdiretorioPdfsBaixados2);
 
 			}
-			//Aqui não vou colocar o else para dar um throw new Exception porque percebi que existem pedidos repetidos.
-			//Quando temos pedidos repetidos, o programa não está deixando sobrescrever arquivos iguais (é o que eu achei vendo 
-			//uma das execuções, ou seja, não debuguei), então cai no catch acima.
-			//Porém ao fim das 50 tentativas, ele sai e vai para o próximo pedido, o que não aconteceria se tivesse o throw new Exception
+			//Aqui nï¿½o vou colocar o else para dar um throw new Exception porque percebi que existem pedidos repetidos.
+			//Quando temos pedidos repetidos, o programa nï¿½o estï¿½ deixando sobrescrever arquivos iguais (ï¿½ o que eu achei vendo 
+			//uma das execuï¿½ï¿½es, ou seja, nï¿½o debuguei), entï¿½o cai no catch acima.
+			//Porï¿½m ao fim das 50 tentativas, ele sai e vai para o prï¿½ximo pedido, o que nï¿½o aconteceria se tivesse o throw new Exception
 		}
     	
     }
@@ -2042,7 +2042,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
         }
         
         if (!sucesso) {
-        	throw new Exception("Ocorreu um erro no momento de mover o relatório " + caminhoArquivoOrigem + " para " + caminhoDiretorioDestino);
+        	throw new Exception("Ocorreu um erro no momento de mover o relatorio " + caminhoArquivoOrigem + " para " + caminhoDiretorioDestino);
         	
         }
         
@@ -2053,7 +2053,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     	
     	try {
     		
-		// Deleto arquivos que existirem no diretório de relatórios
+		// Deleto arquivos que existirem no diretï¿½rio de relatï¿½rios
 		apagaArquivosDiretorioDeRelatorios(Util.getValor("caminho.download.relatorios"));
     	
     	extracaoPossuiPedidos = true;
@@ -2064,7 +2064,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     	//String idPedidosRecibidos = "//*[@id=\"TID_TOPMENU\"]/div[1]/div/span[2]";
     	//wait.until(ExpectedConditions.elementToBeClickable(By.id(idPedidosRecibidos))).click();
     	
-    	// Clicando no item CONSULTA Y GESTIÓN
+    	// Clicando no item CONSULTA Y GESTIï¿½N
     	//String idConsultaGestion = "//*[@id=\"marketplacecontrol-1122975566-overlays\"]/div[2]/div/div/span[1]";
     	//wait.until(ExpectedConditions.elementToBeClickable(By.id(idConsultaGestion))).click();
     	
@@ -2072,61 +2072,62 @@ public class AutomacaoAdquiraExtracaoPedidos {
     	String idDescargarListado = "TID_CONTENTPANEL_supplier_SupplierPurchaseOrdersListPanel_BUTTON_DOWNLOAD_LIST";
     	wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(idDescargarListado)));
     	
-    	// Esperando aparecer o texto Items por página:
-    	String textoItemsPorPagina = "Items por página:";
-		// Aguarda o surgimento da palavra Items por página:
+    	// Esperando aparecer o texto Items por pï¿½gina:
+    	String textoItemsPorPagina = "Items por pÃ¡gina:";
+		// Aguarda o surgimento da palavra Items por pï¿½gina:
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div [text()='"+textoItemsPorPagina+"']")));
 		Thread.sleep(1000);
 		
 		// Clicar no item do menu DESDE
-		String idDesde = "//*[@id=\"TID_CONTENTPANEL_supplier_SupplierPurchaseOrdersListPanel\"]/div[3]/div[1]/div/div[1]/div/div[4]/div[1]";
+		//String idDesde = "//*[@id=\"TID_CONTENTPANEL_supplier_SupplierPurchaseOrdersListPanel\"]/div[3]/div[1]/div/div[1]/div/div[4]/div[1]";
+		String idDesde = "//*[@id=\"TID_CONTENTPANEL_supplier_SupplierPurchaseOrdersListPanel\"]/div[3]/div[1]/div/div[1]/div/div[5]/div[1]";
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath(idDesde))).click();
 		Thread.sleep(1000);
 		
-		// Clicar no item ÚLTIMA SEMANA
+		// Clicar no item ï¿½LTIMA SEMANA
 		String idUltimaSemana = "//*[@id=\"_DateRangeFilterPopupButton_Button_LAST_WEEK\"]";
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath(idUltimaSemana))).click();
 		Thread.sleep(1000);
 
 		try {
-			// Se for utilizar o método buscaAvancadaComUrl, o id da ação Clicar no link Descargar Listado será TID_CONTENTPANEL_supplier_SupplierWelcomePanel_CONTENTPANEL_supplier_SupplierPurchaseOrdersListPanel_BUTTON_DOWNLOAD_LIST
-			// Se for utilizar o método buscaAvancada, o id da ação Clicar no link Descargar Listado será TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_CONTENTPANEL_supplier_SupplierPurchaseOrdersListPanel_BUTTON_DOWNLOAD_LIST
-			// Para este caso, creio que a regra acima não se aplica, ou seja, o id sempre será TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_CONTENTPANEL_supplier_SupplierPurchaseOrdersListPanel_BUTTON_DOWNLOAD_LIST
-			// independente se o método for o buscaAvancadaComUrl ou o buscaAvancada
+			// Se for utilizar o mï¿½todo buscaAvancadaComUrl, o id da aï¿½ï¿½o Clicar no link Descargar Listado serï¿½ TID_CONTENTPANEL_supplier_SupplierWelcomePanel_CONTENTPANEL_supplier_SupplierPurchaseOrdersListPanel_BUTTON_DOWNLOAD_LIST
+			// Se for utilizar o mï¿½todo buscaAvancada, o id da aï¿½ï¿½o Clicar no link Descargar Listado serï¿½ TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_CONTENTPANEL_supplier_SupplierPurchaseOrdersListPanel_BUTTON_DOWNLOAD_LIST
+			// Para este caso, creio que a regra acima nï¿½o se aplica, ou seja, o id sempre serï¿½ TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_CONTENTPANEL_supplier_SupplierPurchaseOrdersListPanel_BUTTON_DOWNLOAD_LIST
+			// independente se o mï¿½todo for o buscaAvancadaComUrl ou o buscaAvancada
 			
 			//driver.findElement(By.id(idDescargarListado));
 			
 			// Verifico se existe o link Descargar Listado
-			// Caso o link Descargar Listado não apareça, é porque provavelmente não existem pedidos para o período selecionado
+			// Caso o link Descargar Listado nï¿½o apareï¿½a, ï¿½ porque provavelmente nï¿½o existem pedidos para o perï¿½odo selecionado
 			// Neste caso, armazeno os contract numbers em um array
 			WebDriverWait waitIdDescargarListado = new WebDriverWait(driver, 10);
 			waitIdDescargarListado.until(ExpectedConditions.visibilityOfElementLocated(By.id(idDescargarListado)));
 			Thread.sleep(3000);
 			
 		} catch (Exception e) {
-			System.out.println("Não foram encontrados pedidos");
+			System.out.println("Nao foram encontrados pedidos");
 			extracaoPossuiPedidos = false;
 		}
 		
-		// Filtro do menu por período
+		// Filtro do menu por perï¿½odo
 		
 		
 		if (extracaoPossuiPedidos) {	
 			
-			// Aguarda o surgimento da palavra Items por página:
+			// Aguarda o surgimento da palavra Items por pï¿½gina:
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div [text()='"+textoItemsPorPagina+"']")));
 			
 			// Clicar no link Descargar Listado
 			wait.until(ExpectedConditions.elementToBeClickable(By.id(idDescargarListado))).click();
 			
-			// Opção de Incluir Líneas
+			// Opï¿½ï¿½o de Incluir Lï¿½neas
 		    String idTextoIncluirLineas= "//span[@id='pid-includeLines']/label";
 		    wait.until(ExpectedConditions.elementToBeClickable(By.xpath(idTextoIncluirLineas))).click();
 		    Thread.sleep(3000);
 		    
-			// Clicar no botão Generar Fichero
-			// Se for utilizar o método buscaAvancadaComUrl, o botão Generar Ficheiro terá o id TID_CONTENTPANEL_supplier_SupplierWelcomePanel_BUTTON_GENERATE_FILE
-			// Se for utilizar o método buscaAvancada, o botão Generar Ficheiro terá o id TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_BUTTON_GENERATE_FILE
+			// Clicar no botï¿½o Generar Fichero
+			// Se for utilizar o mï¿½todo buscaAvancadaComUrl, o botï¿½o Generar Ficheiro terï¿½ o id TID_CONTENTPANEL_supplier_SupplierWelcomePanel_BUTTON_GENERATE_FILE
+			// Se for utilizar o mï¿½todo buscaAvancada, o botï¿½o Generar Ficheiro terï¿½ o id TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_BUTTON_GENERATE_FILE
 		    WebDriverWait waitGenerarFichero = new WebDriverWait(driver, 5);
 			try {                                                                                                                                                                                          
 				waitGenerarFichero.until(ExpectedConditions.elementToBeClickable(By.id("TID_CONTENTPANEL_supplier_SupplierPurchaseOrdersListPanel_BUTTON_GENERATE_FILE"))).click();
@@ -2135,9 +2136,9 @@ public class AutomacaoAdquiraExtracaoPedidos {
 			}
 			Thread.sleep(2000);
 			
-			// Clicar no botão Descargar
-			// Se for utilizar o método buscaAvancadaComUrl, o botão Descargar terá o id TID_CONTENTPANEL_supplier_SupplierWelcomePanel_DIALOGWINDOW_DIALOG_FILE_DOWNLOAD_BUTTON_DOWNLOAD
-			// Se for utilizar o método buscaAvancada, o botão Descargar terá o id TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_DIALOGWINDOW_DIALOG_FILE_DOWNLOAD_BUTTON_DOWNLOAD
+			// Clicar no botï¿½o Descargar
+			// Se for utilizar o mï¿½todo buscaAvancadaComUrl, o botï¿½o Descargar terï¿½ o id TID_CONTENTPANEL_supplier_SupplierWelcomePanel_DIALOGWINDOW_DIALOG_FILE_DOWNLOAD_BUTTON_DOWNLOAD
+			// Se for utilizar o mï¿½todo buscaAvancada, o botï¿½o Descargar terï¿½ o id TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_DIALOGWINDOW_DIALOG_FILE_DOWNLOAD_BUTTON_DOWNLOAD
 			 WebDriverWait waitbotaoDescargar = new WebDriverWait(driver, 5);
 			try {
 				waitbotaoDescargar.until(ExpectedConditions.elementToBeClickable(By.id("TID_CONTENTPANEL_supplier_SupplierPurchaseOrdersListPanel_DIALOGWINDOW_DIALOG_FILE_DOWNLOAD_BUTTON_DOWNLOAD"))).click();
@@ -2147,8 +2148,8 @@ public class AutomacaoAdquiraExtracaoPedidos {
 			Thread.sleep(2000);
 			
 			// Pego o nome do arquivo
-			// Se for utilizar o método buscaAvancadaComUrl, o id do nome do arquivo terá no meio do nome a palavra TID_CONTENTPANEL_supplier_SupplierWelcomePanel_DIALOGWINDOW_DIALOG_FILE_DOWNLOAD
-			// Se for utilizar o método buscaAvancada, o id do nome do arquivo terá no meio do nome a palavra TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_DIALOGWINDOW_DIALOG_FILE_DOWNLOAD
+			// Se for utilizar o mï¿½todo buscaAvancadaComUrl, o id do nome do arquivo terï¿½ no meio do nome a palavra TID_CONTENTPANEL_supplier_SupplierWelcomePanel_DIALOGWINDOW_DIALOG_FILE_DOWNLOAD
+			// Se for utilizar o mï¿½todo buscaAvancada, o id do nome do arquivo terï¿½ no meio do nome a palavra TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_DIALOGWINDOW_DIALOG_FILE_DOWNLOAD
 			String idNomeArquivo = "";
 			WebDriverWait waitNomeArquivo = new WebDriverWait(driver, 5);
 			try {
@@ -2171,9 +2172,9 @@ public class AutomacaoAdquiraExtracaoPedidos {
 			
 			nomeRelatorioBaixado = textoNomeArquivo.getText().replaceAll(":", caracterNomeArquivo);
 			
-			// Se for utilizar o método buscaAvancadaComUrl, o botão Cancelar terá o id TID_CONTENTPANEL_supplier_SupplierWelcomePanel_DIALOGWINDOW_DIALOG_FILE_DOWNLOAD_BUTTON_CANCEL
-			// Se for utilizar o método buscaAvancada, o botão Cancelar terá o id TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_DIALOGWINDOW_DIALOG_FILE_DOWNLOAD_BUTTON_CANCEL
-			// Clicar no botão Cancelar
+			// Se for utilizar o mï¿½todo buscaAvancadaComUrl, o botï¿½o Cancelar terï¿½ o id TID_CONTENTPANEL_supplier_SupplierWelcomePanel_DIALOGWINDOW_DIALOG_FILE_DOWNLOAD_BUTTON_CANCEL
+			// Se for utilizar o mï¿½todo buscaAvancada, o botï¿½o Cancelar terï¿½ o id TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_DIALOGWINDOW_DIALOG_FILE_DOWNLOAD_BUTTON_CANCEL
+			// Clicar no botï¿½o Cancelar
 			WebDriverWait waitbotaoCancelar = new WebDriverWait(driver, 5);
 			try {
 				waitbotaoCancelar.until(ExpectedConditions.elementToBeClickable(By.id("TID_CONTENTPANEL_supplier_SupplierPurchaseOrdersListPanel_DIALOGWINDOW_DIALOG_FILE_DOWNLOAD_BUTTON_CANCEL"))).click();
@@ -2186,29 +2187,29 @@ public class AutomacaoAdquiraExtracaoPedidos {
 		
 		//voltarParaHome(driver, wait, js);
 		
-		// Está dando erro de logout no servidor
-		// O botão de logout está ficando escondido
-		// então retirarei o logout e o login por enquanto
+		// Estï¿½ dando erro de logout no servidor
+		// O botï¿½o de logout estï¿½ ficando escondido
+		// entï¿½o retirarei o logout e o login por enquanto
 		//fazerLogoutAdquira(driver, wait);
 		
 		//acessarPaginaInicial(driver, wait);
 		
 		} catch (Exception e2) {
 			contadorfazerDownlodRelatorioPorPeriodo ++;
-			// Executo até 100 vezes se der erro no fazerDownlodRelatorioPorPeriodo
+			// Executo ate 100 vezes se der erro no fazerDownlodRelatorioPorPeriodo
 			if (contadorfazerDownlodRelatorioPorPeriodo <= 100) {
 				
-				System.out.println("Deu erro no método fazerDownlodRelatorioPorPeriodo, tentativa de acerto: " + contadorfazerDownlodRelatorioPorPeriodo);
-				// Está dando erro de logout no servidor
-				// O botão de logout está ficando escondido
-				// então retirarei o logout e o login por enquanto
+				System.out.println("Deu erro no metodo fazerDownlodRelatorioPorPeriodo, tentativa de acerto: " + contadorfazerDownlodRelatorioPorPeriodo);
+				// Estï¿½ dando erro de logout no servidor
+				// O botï¿½o de logout estï¿½ ficando escondido
+				// entï¿½o retirarei o logout e o login por enquanto
 				fazerLogoutAdquira(driver, wait);
 				fazerLoginAdquira(driver, wait, js);
 				//acessarPaginaInicial(driver, wait);
 				fazerDownlodRelatorioPorPeriodo(driver, wait, js);
 			
 			} else {
-	        	throw new Exception("Ocorreu um erro no momento de fazer o download do relatório por período: " + e2);
+	        	throw new Exception("Ocorreu um erro no momento de fazer o download do relatorio por periodo: " + e2);
 	        }
 
 		
@@ -2221,14 +2222,14 @@ public class AutomacaoAdquiraExtracaoPedidos {
 		js.executeScript("javascript:history.back()");
 		
 		// Aguarda aparecer texto na home
-		// Se esse texto não aparecer na home, é porque o Adquira está muito lento e não conseguiu carregar as informações
-		// e neste caso ele provavelmente não conseguirá seguir adiante
+		// Se esse texto nï¿½o aparecer na home, ï¿½ porque o Adquira estï¿½ muito lento e nï¿½o conseguiu carregar as informaï¿½ï¿½es
+		// e neste caso ele provavelmente nï¿½o conseguirï¿½ seguir adiante
 	    String textoFaturasEmitidasPorMes = "FACTURAS EMITIDAS POR MES";
 	    wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div [text()='"+textoFaturasEmitidasPorMes+"']")));
 	    
     	// Aguarda aparecer texto na home
-    	//String textoPosicionGlobal = "Posición global";
-    	//wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[contains(.,'Posición global')]")));
+    	//String textoPosicionGlobal = "PosiciÃ³n global";
+    	//wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[contains(.,'PosiciÃ³n global')]")));
 	    
 	    fecharMensagemVerNotificacoes(driver);
 
@@ -2240,9 +2241,9 @@ public class AutomacaoAdquiraExtracaoPedidos {
     	
     	try {
 			
-    		// Botão Aplicar
-        	// Se for utilizar o método buscaAvancadaComUrl, o botão Aplicar terá o id TID_CONTENTPANEL_supplier_SupplierWelcomePanel_BUTTON_APPLY
-        	// Se for utilizar o método buscaAvancada, o botão Aplicar terá o id TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_BUTTON_APPLY
+    		// Botï¿½o Aplicar
+        	// Se for utilizar o mï¿½todo buscaAvancadaComUrl, o botï¿½o Aplicar terï¿½ o id TID_CONTENTPANEL_supplier_SupplierWelcomePanel_BUTTON_APPLY
+        	// Se for utilizar o mï¿½todo buscaAvancada, o botï¿½o Aplicar terï¿½ o id TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_BUTTON_APPLY
     		WebDriverWait waitbotaoAplicar = new WebDriverWait(driver, 5);
     		try {
     			waitbotaoAplicar.until(ExpectedConditions.elementToBeClickable(By.id("TID_CONTENTPANEL_supplier_SupplierWelcomePanel_BUTTON_APPLY"))).click();
@@ -2254,14 +2255,14 @@ public class AutomacaoAdquiraExtracaoPedidos {
     	} catch (Exception e) {
     		
     		contadorErros++;
-    		// Executo até 20 vezes se der erro no preenchemento dos campos do filtro
+    		// Executo atï¿½ 20 vezes se der erro no preenchemento dos campos do filtro
     		if (contadorErros <= 20) {
     			
     			System.out.println("Deu erro no preenchimento dos filtros");
-    			// Caso ocorra algum problema na automação onde o campo do Nome não seja preenchido com a palavra contract number,
-    			// clico no botão Aceptar da mensagem de erro que ocorre
-            	// Se for utilizar o método buscaAvancadaComUrl, o botão Aplicar terá o id TID_CONTENTPANEL_supplier_SupplierWelcomePanel_BUTTON_ACCEPT
-            	// Se for utilizar o método buscaAvancada, o botão Aplicar terá o id TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_BUTTON_ACCEPT
+    			// Caso ocorra algum problema na automaï¿½ï¿½o onde o campo do Nome nï¿½o seja preenchido com a palavra contract number,
+    			// clico no botï¿½o Aceptar da mensagem de erro que ocorre
+            	// Se for utilizar o mï¿½todo buscaAvancadaComUrl, o botï¿½o Aplicar terï¿½ o id TID_CONTENTPANEL_supplier_SupplierWelcomePanel_BUTTON_ACCEPT
+            	// Se for utilizar o mï¿½todo buscaAvancada, o botï¿½o Aplicar terï¿½ o id TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_BUTTON_ACCEPT
     			WebDriverWait waitbotaoAceptar = new WebDriverWait(driver, 5);
     			try {
     				waitbotaoAceptar.until(ExpectedConditions.elementToBeClickable(By.id("TID_CONTENTPANEL_supplier_SupplierWelcomePanel_BUTTON_ACCEPT"))).click();
@@ -2271,8 +2272,8 @@ public class AutomacaoAdquiraExtracaoPedidos {
     			Thread.sleep(3000);
     			
     			// Cancelo o modal de filtro
-            	// Se for utilizar o método buscaAvancadaComUrl, o botão para cancelar o modal terá o id TID_CONTENTPANEL_supplier_SupplierWelcomePanel_BUTTON_CANCEL
-            	// Se for utilizar o método buscaAvancada, o botão para cancelar o modal terá o id TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_BUTTON_CANCEL
+            	// Se for utilizar o mï¿½todo buscaAvancadaComUrl, o botï¿½o para cancelar o modal terï¿½ o id TID_CONTENTPANEL_supplier_SupplierWelcomePanel_BUTTON_CANCEL
+            	// Se for utilizar o mï¿½todo buscaAvancada, o botï¿½o para cancelar o modal terï¿½ o id TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_BUTTON_CANCEL
     			WebDriverWait waitbotaoCancel = new WebDriverWait(driver, 5);
     			try {
     				waitbotaoCancel.until(ExpectedConditions.elementToBeClickable(By.id("TID_CONTENTPANEL_supplier_SupplierWelcomePanel_BUTTON_CANCEL"))).click();
@@ -2282,13 +2283,13 @@ public class AutomacaoAdquiraExtracaoPedidos {
     			
     			Thread.sleep(3000);
     			
-    			// Faço o logout, depois o login depois entro na busca avançada e por fim restabeleço filtros
+    			// Faï¿½o o logout, depois o login depois entro na busca avanï¿½ada e por fim restabeleï¿½o filtros
     			// Dessa forma, descobri que o campo Nome volta a funcionar preenchendo a palavra contract number
     			fazerLogoutAdquiraDepoisLoginDepoisBuscaAvancadaDepoisRestabeleceFiltros(driver, wait, js);
     			
-    			// Opção de Datos Adicionales
-            	// Se for utilizar o método buscaAvancadaComUrl, a Opção de Datos Adicionales terá o id TID_CONTENTPANEL_supplier_SupplierWelcomePanel_CUSTOMFIELD_EXTRINSICDATA_ICONBUTTON_ICON_EDIT
-            	// Se for utilizar o método buscaAvancada, a Opção de Datos Adicionales terá o id TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_CUSTOMFIELD_EXTRINSICDATA_ICONBUTTON_ICON_EDIT
+    			// Opï¿½ï¿½o de Datos Adicionales
+            	// Se for utilizar o mï¿½todo buscaAvancadaComUrl, a Opï¿½ï¿½o de Datos Adicionales terï¿½ o id TID_CONTENTPANEL_supplier_SupplierWelcomePanel_CUSTOMFIELD_EXTRINSICDATA_ICONBUTTON_ICON_EDIT
+            	// Se for utilizar o mï¿½todo buscaAvancada, a Opï¿½ï¿½o de Datos Adicionales terï¿½ o id TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_CUSTOMFIELD_EXTRINSICDATA_ICONBUTTON_ICON_EDIT
     			WebDriverWait waitbotaoDatosAdicionales = new WebDriverWait(driver, 5);
     			try {
     				waitbotaoDatosAdicionales.until(ExpectedConditions.elementToBeClickable(By.id("TID_CONTENTPANEL_supplier_SupplierWelcomePanel_CUSTOMFIELD_EXTRINSICDATA_ICONBUTTON_ICON_EDIT"))).click();
@@ -2350,7 +2351,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
        	campoNombre.sendKeys("R");
     	Thread.sleep(1000);
     	
-    	// Aperta o ENTER para selecionar a opção
+    	// Aperta o ENTER para selecionar a opï¿½ï¿½o
     	campoNombre.sendKeys(Keys.RETURN); 
     	Thread.sleep(3000);
     	
@@ -2362,9 +2363,9 @@ public class AutomacaoAdquiraExtracaoPedidos {
     	campoValor.sendKeys(contractNumber);
     	Thread.sleep(3000);
     	
-		// Botão Añadir
-    	// Se for utilizar o método buscaAvancadaComUrl, o botão Añadir terá o id TID_CONTENTPANEL_supplier_SupplierWelcomePanel_BUTTON_ADD
-    	// Se for utilizar o método buscaAvancada, o botão Añadir terá o id TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_BUTTON_ADD
+		// Botï¿½o Aï¿½adir
+    	// Se for utilizar o mï¿½todo buscaAvancadaComUrl, o botï¿½o Aï¿½adir terï¿½ o id TID_CONTENTPANEL_supplier_SupplierWelcomePanel_BUTTON_ADD
+    	// Se for utilizar o mï¿½todo buscaAvancada, o botï¿½o Aï¿½adir terï¿½ o id TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_BUTTON_ADD
     	WebDriverWait waitbotaoAnadir = new WebDriverWait(driver, 5);
 		try {
 			waitbotaoAnadir.until(ExpectedConditions.elementToBeClickable(By.id("TID_CONTENTPANEL_supplier_SupplierWelcomePanel_BUTTON_ADD"))).click();
@@ -2376,17 +2377,17 @@ public class AutomacaoAdquiraExtracaoPedidos {
     	
     }
     
-    // Preenche o campo Nombre selecionando a palavra desejada em um combo de opções
+    // Preenche o campo Nombre selecionando a palavra desejada em um combo de opï¿½ï¿½es
     public static void preencherCamposFiltro2 (WebDriver driver, WebDriverWait wait, String contractNumber) throws InterruptedException {
     	
-    	// Abre as opções do combo de pesquisa
+    	// Abre as opï¿½ï¿½es do combo de pesquisa
     	String idCampoNombre = "//div[@id='TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_COMBOBOX_NAME']/input";
     	wait.until(ExpectedConditions.elementToBeClickable(By.xpath(idCampoNombre))).click();
     	WebElement campoNombre = driver.findElement(By.xpath(idCampoNombre));
     	campoNombre.clear();
     	campoNombre.sendKeys(Keys.DOWN);
     	
-    	// Clica no sinal de mais até encontrar a opção de CONTRACT NUMBER
+    	// Clica no sinal de mais atï¿½ encontrar a opï¿½ï¿½o de CONTRACT NUMBER
     	String idSinalMais = "//div[@id='VAADIN_COMBOBOX_OPTIONLIST']/div/div[3]";
     	
     	for (int i = 0; i < 3; i++) {
@@ -2394,7 +2395,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		Thread.sleep(2000);
     	}
     	
-    	// Seleciona a opção de Contract Number
+    	// Seleciona a opï¿½ï¿½o de Contract Number
     	wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='VAADIN_COMBOBOX_OPTIONLIST']/div/div[2]/table/tbody/tr/td/span"))).click();
     	Thread.sleep(2000);
     	
@@ -2406,7 +2407,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     	campoValor.sendKeys(contractNumber);
     	Thread.sleep(1000);
     	
-		// Botão Añadir
+		// Botï¿½o Aï¿½adir
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_BUTTON_ADD"))).click();
 		Thread.sleep(2000);
     	
@@ -2415,7 +2416,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     
     public static void fazerDownlodPdfPedido(WebDriver driver, WebDriverWait wait, JavascriptExecutor js, Pedido pedido  ) throws InterruptedException {
     	
-       	// Aguardando o campo de Búsqueda Avanzada aparecer 
+       	// Aguardando o campo de Bï¿½squeda Avanzada aparecer 
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("TID_SEARCHBAR_BUTTON_ADVANCED_SEARCH")));
         
         // Campo de Busca
@@ -2426,7 +2427,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     	campoBusca.sendKeys(pedido.getNumero());
     	Thread.sleep(1000);
     	
-    	// Aperta o ENTER para selecionar a opção
+    	// Aperta o ENTER para selecionar a opï¿½ï¿½o
     	campoBusca.sendKeys(Keys.RETURN); 
     	Thread.sleep(2000);
     	
@@ -2434,7 +2435,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='TID_CONTENTPANEL_supplier_SupplierSearchResultsPanel']/div[3]/div/div[2]/div/div/div[2]/span[2]"))).click();
 		Thread.sleep(2000);
 		
-		// Se o pedido não tiver pdf para baixar, seto o atributo encontrouPdfAnexo como false
+		// Se o pedido nï¿½o tiver pdf para baixar, seto o atributo encontrouPdfAnexo como false
 		try {
 			
 			// Clica no link descargar pdf
@@ -2447,11 +2448,11 @@ public class AutomacaoAdquiraExtracaoPedidos {
 			WebElement textoNomeArquivo = driver.findElement(By.xpath(idNomeArquivo));
 			nomeZipBaixado = textoNomeArquivo.getText().replaceAll("pdf", "zip");
 			
-			// Clica no botão descargar
+			// Clica no botï¿½o descargar
 			wait.until(ExpectedConditions.elementToBeClickable(By.id("TID_CONTENTPANEL_supplier_SupplierPurchaseOrdersListPanel_DIALOGWINDOW_DIALOG_FILE_DOWNLOAD_BUTTON_DOWNLOAD"))).click();
 			Thread.sleep(2000);
 			
-			// Clicar no botão Cancelar
+			// Clicar no botï¿½o Cancelar
 			wait.until(ExpectedConditions.elementToBeClickable(By.id("TID_CONTENTPANEL_supplier_SupplierPurchaseOrdersListPanel_DIALOGWINDOW_DIALOG_FILE_DOWNLOAD_BUTTON_CANCEL"))).click();
 			Thread.sleep(2000);
 			
@@ -2481,7 +2482,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		Thread.sleep(3000);
     		// Quantidade de linhas de contract numbers
     		String qtdLinhasContractNumbers =  wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/form/div[12]/div/div[2]/div[2]/div[3]/div[1]/div/div/div/table/tbody/tr/td/table[2]/tbody[2]/tr/td/span"))).getText().trim();
-    		// Retirando os caracteres que não forem números
+    		// Retirando os caracteres que nï¿½o forem nï¿½meros
     		String somenteNumerosQtdLinhasContractNumbers = qtdLinhasContractNumbers.replaceAll("[^0-9]", "");
     		int quantidadeLinhasContractNumbers = Integer.parseInt(somenteNumerosQtdLinhasContractNumbers);
     		
@@ -2527,14 +2528,14 @@ public class AutomacaoAdquiraExtracaoPedidos {
 			contadorErrosRecuperaContractNumbersSharepoint ++;
 	            Thread.sleep(3000);
 	            
-	            // Tento fazer por até 10 vezes
+	            // Tento fazer por atï¿½ 10 vezes
 	            if (contadorErrosRecuperaContractNumbersSharepoint <= 10) {
 	            	
-					System.out.println("Deu erro no método recuperaContractNumbersSharepoint, tentativa de acerto: " + contadorErrosRecuperaContractNumbersSharepoint);
+					System.out.println("Deu erro no metodo recuperaContractNumbersSharepoint, tentativa de acerto: " + contadorErrosRecuperaContractNumbersSharepoint);
 					recuperaContractNumbersSharepoint(driver, wait);
 	            
 	            } else {
-	         	   throw new Exception("Erro no método recuperaContractNumbersSharepoint: " + e);
+	         	   throw new Exception("Erro no metodo recuperaContractNumbersSharepoint: " + e);
 	            }
 			}
     	
@@ -2554,11 +2555,11 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		Thread.sleep(3000);
     		
     		// Click no link Automacao para abrir as linhas de pedidos
-    		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(text(),'Agrupamento do Robô')]"))).click();
+    		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(text(),'Agrupamento do RobÃ´')]"))).click();
     		Thread.sleep(3000);
     		// Quantidade de linhas de pedidos
     		String qtdLinhasPedidos =  wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/form/div[12]/div/div[2]/div[2]/div[3]/div[1]/div/div/div/table/tbody/tr/td/table[2]/tbody[2]/tr/td/span"))).getText().trim();
-    		// Retirando os caracteres que não forem números
+    		// Retirando os caracteres que nï¿½o forem nï¿½meros
     		String somenteNumerosQtdLinhasPedidos = qtdLinhasPedidos.replaceAll("[^0-9]", "");
     		int quantidadeLinhasPedidos = Integer.parseInt(somenteNumerosQtdLinhasPedidos);
     		
@@ -2586,14 +2587,14 @@ public class AutomacaoAdquiraExtracaoPedidos {
 			contadorErrosRecuperaPedidosSharepoint ++;
 	            Thread.sleep(3000);
 	            
-	            // Tento fazer por até 10 vezes
+	            // Tento fazer por atï¿½ 10 vezes
 	            if (contadorErrosRecuperaPedidosSharepoint <= 10) {
 	            	
-					System.out.println("Deu erro no método recuperaPedidosSharepoint, tentativa de acerto: " + contadorErrosRecuperaPedidosSharepoint);
+					System.out.println("Deu erro no metodo recuperaPedidosSharepoint, tentativa de acerto: " + contadorErrosRecuperaPedidosSharepoint);
 					recuperaPedidosSharepoint(driver, wait);
 	            
 	            } else {
-	         	   throw new Exception("Erro no método recuperaPedidosSharepoint: " + e);
+	         	   throw new Exception("Erro no metodo recuperaPedidosSharepoint: " + e);
 	            }
 			}
 		
@@ -2641,10 +2642,10 @@ public class AutomacaoAdquiraExtracaoPedidos {
 			contadorErrosLogin ++;
 	            Thread.sleep(3000);
 	            
-	            // Tento fazer o login por até 10 vezes
+	            // Tento fazer o login por atï¿½ 10 vezes
 	            if (contadorErrosLogin <= 10) {
 	            	
-					System.out.println("Deu erro no método fazerLogin, tentativa de acerto: " + contadorErrosLogin);
+					System.out.println("Deu erro no metodo fazerLogin, tentativa de acerto: " + contadorErrosLogin);
 					fazerLogoutAdquira(driver, wait);
 					fazerLoginAdquira(driver, wait, js);
 	            
@@ -2678,14 +2679,14 @@ public class AutomacaoAdquiraExtracaoPedidos {
 	    
 	    
 	    //wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div [text()='"+textoFaturasEmitidasPorMes+"']")));
-	    // Se esse texto não aparecer na home, é porque o Adquira está muito lento e não conseguiu carregar as informações
-	    // e neste caso ele provavelmente não conseguirá seguir adiante
+	    // Se esse texto nï¿½o aparecer na home, ï¿½ porque o Adquira estï¿½ muito lento e nï¿½o conseguiu carregar as informaï¿½ï¿½es
+	    // e neste caso ele provavelmente nï¿½o conseguirï¿½ seguir adiante
 	    // Aguarda aparecer texto na home
 	    /*
 	    try {
 	    	wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div [text()='"+textoFaturasEmitidasPorMes+"']")));
 		} catch (Exception e) {
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[contains(.,'Posición globala')]")));
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[contains(.,'Posiciï¿½n globala')]")));
 		}
     	*/
     	
@@ -2696,34 +2697,34 @@ public class AutomacaoAdquiraExtracaoPedidos {
     
     public static void fecharMensagemAceitarCookies(WebDriver driver) throws Exception {
     	
-	    // Opção de Aceitar Cookies
-	    // Se aparecer a opção de aceitar cookies, clico no aceitar
-	    // Aguardo até 10 segundos para a opção aparecer
-	    // Se ela não aparecer dará erro, daí sigo adiante
+	    // Opï¿½ï¿½o de Aceitar Cookies
+	    // Se aparecer a opï¿½ï¿½o de aceitar cookies, clico no aceitar
+	    // Aguardo atï¿½ 10 segundos para a opï¿½ï¿½o aparecer
+	    // Se ela nï¿½o aparecer darï¿½ erro, daï¿½ sigo adiante
     	try {
     		
     		WebDriverWait waitAceitarCookies = new WebDriverWait(driver, 10);
     		aceitarCookies(waitAceitarCookies);
 		
     	} catch (Exception e) {
-    		System.out.println("Deu erro na opção de aceitar cookies");
+    		System.out.println("Deu erro na opcao de aceitar cookies");
 		}
     	
     }
     
     public static void fecharMensagemVerNotificacoes(WebDriver driver) throws Exception {
     	
-	    // Opção de Ver Notificações
-	    // Se aparecer a opção de ver notificações, clico no botão de fechar
-	    // Aguardo até 10 segundos para a opção aparecer
-	    // Se ela não aparecer dará erro, daí sigo adiante
+	    // Opï¿½ï¿½o de Ver Notificaï¿½ï¿½es
+	    // Se aparecer a opï¿½ï¿½o de ver notificaï¿½ï¿½es, clico no botï¿½o de fechar
+	    // Aguardo atï¿½ 10 segundos para a opï¿½ï¿½o aparecer
+	    // Se ela nï¿½o aparecer darï¿½ erro, daï¿½ sigo adiante
     	try {
     		
     		WebDriverWait waitVerNotificacoes = new WebDriverWait(driver, 10);
     		verNotificacoes(waitVerNotificacoes);
 		
     	} catch (Exception e) {
-    		System.out.println("Deu erro na opção de ver notificações");
+    		System.out.println("Deu erro na opcao de ver notificacoes");
 		}
     	
     }
@@ -2731,15 +2732,15 @@ public class AutomacaoAdquiraExtracaoPedidos {
     public static void fecharPopUpTelaInicial(WebDriver driver) throws Exception {
     	
 	    // Se aparecer um pop-up com um informativo
-	    // Aguardo até 10 segundos para a opção aparecer
-	    // Se ela não aparecer dará erro, daí sigo adiante
+	    // Aguardo atï¿½ 10 segundos para a opï¿½ï¿½o aparecer
+	    // Se ela nï¿½o aparecer darï¿½ erro, daï¿½ sigo adiante
     	try {
     		
     		WebDriverWait waitFecharPopUpTelaInicial = new WebDriverWait(driver, 5);
     		popUpTelaInicial(waitFecharPopUpTelaInicial);
 		
     	} catch (Exception e) {
-    		System.out.println("Deu erro na opção de fechar pop-up da tela inicial");
+    		System.out.println("Deu erro na opcao de fechar pop-up da tela inicial");
 		}
     	
     }
@@ -2760,7 +2761,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 		   XSSFSheet sheetRelatorio = workbook.getSheetAt(0);
 		   
 		   // Uso o DataFormatter para deixar todos os campos como String, inclusive
-		   // os que tem números
+		   // os que tem nï¿½meros
 		   DataFormatter formatter = new DataFormatter();
 		   for (int i=0; i <= sheetRelatorio.getLastRowNum(); i++) {
 		       Row row = sheetRelatorio.getRow(i);
@@ -2778,7 +2779,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 		           boolean contratoPossuiValor = contrato != null && contrato.toString() != null && !contrato.toString().isEmpty();
 		           boolean frentePossuiValor = frente != null && frente.toString() != null && !frente.toString().isEmpty();
 		           boolean contratoSapPossuiValor = contratoSap != null && contratoSap.toString() != null && !contratoSap.toString().isEmpty();
-		           // Pode ser que existam linhas que aparentemente estão vazias, mas possuem conteúdo em branco
+		           // Pode ser que existam linhas que aparentemente estï¿½o vazias, mas possuem conteï¿½do em branco
 		           if (contratoPossuiValor && frentePossuiValor && contratoSapPossuiValor) {
 		        	   
 		        	   ContractNumber contractNumber = new ContractNumber();
@@ -2801,7 +2802,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 		        	   }
 
 		        	   // Status_Contrato
-		        	   // O robô irá processar os contract numbers que possuírem status Ativo no campo Status_Contrato da planilha Rel_Projeto.xlsx"
+		        	   // O robï¿½ irï¿½ processar os contract numbers que possuï¿½rem status Ativo no campo Status_Contrato da planilha Rel_Projeto.xlsx"
 		        	   String status = formatter.formatCellValue(row.getCell(11));
 		        	   if (status != null && !status.isEmpty() && "Ativo".equals(status)) {
 		        		   listaNumerosContractNumbersDistintos.add(contractNumber.getNumero());
@@ -2818,12 +2819,12 @@ public class AutomacaoAdquiraExtracaoPedidos {
 		
 			} catch (FileNotFoundException e) {
 			   e.printStackTrace();
-			   System.out.println("Arquivo Excel de relatório não encontrado!");
-			   throw new Exception("Arquivo Excel de relatório não encontrado!");
+			   System.out.println("Arquivo Excel de relatorio nao encontrado!");
+			   throw new Exception("Arquivo Excel de relatorio nao encontrado!");
 			}
 		
 			if (listaContractNumbersTemporaria.size() == 0) {
-			   throw new Exception("Lista de contract numbers está vazia");
+			   throw new Exception("Lista de contract numbers esta vazia");
 			}
 			
 		}
@@ -2897,8 +2898,8 @@ public class AutomacaoAdquiraExtracaoPedidos {
         				   XSSFCellStyle cellStyle = (XSSFCellStyle) cell.getCellStyle();
         				   XSSFColor color = cellStyle.getFillForegroundColorColor();
         				   
-        				   // Na planilha baixada do Adquira, um pedido é composto por informações que estão na linha azul e na linha verde.
-        				   // Separo essas informações em duas listas para depois criar uma lista única
+        				   // Na planilha baixada do Adquira, um pedido ï¿½ composto por informaï¿½ï¿½es que estï¿½o na linha azul e na linha verde.
+        				   // Separo essas informaï¿½ï¿½es em duas listas para depois criar uma lista ï¿½nica
 
         				   if (cell.getColumnIndex() == 0 && azul.equals(((XSSFColor)color).getARGBHex()) || cell.getColumnIndex() == 1 && azul.equals(((XSSFColor)color).getARGBHex()) ||
         					   cell.getColumnIndex() == 2 && azul.equals(((XSSFColor)color).getARGBHex()) || cell.getColumnIndex() == 4 && azul.equals(((XSSFColor)color).getARGBHex()) ||
@@ -2953,7 +2954,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
         				   
         			   }
         			   
-		        	   // Data Extração
+		        	   // Data Extraï¿½ï¿½o
 		        	    pedido.setDataExtracao(dataAtualPlanilhaFinal);
             		   
         			   if (isAzul) {
@@ -2975,15 +2976,15 @@ public class AutomacaoAdquiraExtracaoPedidos {
 		} catch (Exception e) {
      	   contadorErroslerRelatorioExcel ++;
             Thread.sleep(3000);
-            System.out.println("Arquivo Excel não encontrado! Tentando resolver, tentativa de número: " + contadorErroslerRelatorioExcel);
+            System.out.println("Arquivo Excel nao encontrado! Tentando resolver, tentativa de numero: " + contadorErroslerRelatorioExcel);
             
-            // Tento ler o arquivo por até 20 vezes
+            // Tento ler o arquivo por atï¿½ 20 vezes
             if (contadorErroslerRelatorioExcel <= 20) {
             	
-				System.out.println("Deu erro no método lerRelatorioExcel, tentativa de acerto: " + contadorErroslerRelatorioExcel);
-				// Está dando erro de logout no servidor
-				// O botão de logout está ficando escondido
-				// então retirarei o logout e o login por enquanto
+				System.out.println("Deu erro no metodo lerRelatorioExcel, tentativa de acerto: " + contadorErroslerRelatorioExcel);
+				// Estï¿½ dando erro de logout no servidor
+				// O botï¿½o de logout estï¿½ ficando escondido
+				// entï¿½o retirarei o logout e o login por enquanto
 				fazerLogoutAdquira(driver, wait);
 				fazerLoginAdquira(driver, wait, js);
 				//acessarPaginaInicial(driver, wait);
@@ -2992,12 +2993,12 @@ public class AutomacaoAdquiraExtracaoPedidos {
          	    lerRelatorioExcel(driver, wait, js, relatorio, subdiretorioRelatoriosBaixados);
             
             } else {
-         	   throw new Exception("Arquivo Excel não encontrado! : " + e);
+         	   throw new Exception("Arquivo Excel nao encontrado! : " + e);
             }
 		}
         
         if (listaPedidos.size() == 0) {
-        	   throw new Exception("Lista de pedidos está vazia");
+        	   throw new Exception("Lista de pedidos esta vazia");
         }
         
   }
@@ -3092,7 +3093,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 		   XSSFSheet sheetPedidosFaturados = workbook.getSheet("Raw_Data");
 		   
 		   // Uso o DataFormatter para deixar todos os campos como String, inclusive
-		   // os que tem números
+		   // os que tem nï¿½meros
 		   DataFormatter formatter = new DataFormatter();
 		   
 		   for (int i=0; i <= sheetPedidosFaturados.getLastRowNum(); i++) {
@@ -3111,7 +3112,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 		           Cell poPedido = row.getCell(14);
 		           boolean poPedidoPossuioValor = poPedido != null && poPedido.toString() != null && !poPedido.toString().isEmpty();
 		
-		           // Pode ser que existam linhas que aparentemente estão vazias, mas possuem conteúdo em branco
+		           // Pode ser que existam linhas que aparentemente estï¿½o vazias, mas possuem conteï¿½do em branco
 		           if (poPedidoPossuioValor) {
 		        	   
 		        	   // PO/Pedido
@@ -3131,12 +3132,12 @@ public class AutomacaoAdquiraExtracaoPedidos {
 		
 			} catch (FileNotFoundException e) {
 			   e.printStackTrace();
-			   System.out.println("Arquivo Excel de pedidos faturados não encontrado!");
-			   throw new Exception("Arquivo Excel de pedidos faturados não encontrado!");
+			   System.out.println("Arquivo Excel de pedidos faturados nao encontrado!");
+			   throw new Exception("Arquivo Excel de pedidos faturados nao encontrado!");
 			}
 		
 			if (listaPedidosFaturados.size() == 0) {
-			   throw new Exception("Lista de pedidos faturados está vazia");
+			   throw new Exception("Lista de pedidos faturados esta vazia");
 			}
 			
 		}
@@ -3151,15 +3152,15 @@ public class AutomacaoAdquiraExtracaoPedidos {
         String frente = "Frente";
         String contratoSap = "Contrato SAP";
         String wbs = "WBS";
-        String numeroPedido = "Número Pedido";
+        String numeroPedido = "NÃºmero Pedido";
         String dataPedido = "Data Pedido";
         String valorPedido = "Valor Pedido";
         String cnpjCliente = "Cnpj Cliente";
         String comprador = "Comprador";
         String faturado = "Faturado";
         String salvoNoSharepoint = "Salvo no Sharepoint";
-        String observacaoSharepoint = "Campo Observacão no Sharepoint";
-        String dataExtracao = "Data Extração";
+        String observacaoSharepoint = "Campo Observacao no Sharepoint";
+        String dataExtracao = "Data Extracao";
         String errosNoPedido = "Erros no Pedido";
 
         sheetPedidos.setColumnWidth(0, contrato.length() * 380);
@@ -3179,25 +3180,25 @@ public class AutomacaoAdquiraExtracaoPedidos {
 
         int rownum = 0;
         int cellnumero = 0;
-        // Configuração do Style da célula
+        // Configuraï¿½ï¿½o do Style da cï¿½lula
         XSSFCellStyle styleNegrito = workbook.createCellStyle();
         // Negrito
         XSSFFont font = workbook.createFont();
         font.setBold(true);
-        // Célula com fundo cinza
+        // Cï¿½lula com fundo cinza
         XSSFColor myColor = new XSSFColor(Color.LIGHT_GRAY);
         styleNegrito.setFont(font);
         styleNegrito.setFillForegroundColor(myColor);
         styleNegrito.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         
-        // Cor cinza da célula
+        // Cor cinza da cï¿½lula
         //XSSFCellStyle styleCinza = workbook.createCellStyle();
         //XSSFColor myColor = new XSSFColor(Color.LIGHT_GRAY);
         //styleCinza.setFillForegroundColor(myColor);
         //style.setFillBackgroundColor(myColor);
         //styleCinza.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         
-        // Cabeçalho
+        // Cabeï¿½alho
         Row row = sheetPedidos.createRow(rownum++);
         Cell cellCabecalhoContrato = row.createCell(cellnumero++);
         cellCabecalhoContrato.setCellValue(contrato);
@@ -3289,13 +3290,13 @@ public class AutomacaoAdquiraExtracaoPedidos {
             cellComprador.setCellValue(pedidosNaoFaturados.getComprador());
             
             Cell cellFaturado = row.createCell(cellnum++);
-            cellFaturado.setCellValue( pedidosNaoFaturados.isFaturado() ? "Sim" : "Não" );
+            cellFaturado.setCellValue( pedidosNaoFaturados.isFaturado() ? "Sim" : "Nao" );
             
             Cell cellSalvoNoSharepoint = row.createCell(cellnum++);
-            // Se o pedido não está faturado, mostro a informação se foi salvo no sharepoint
+            // Se o pedido nï¿½o estï¿½ faturado, mostro a informaï¿½ï¿½o se foi salvo no sharepoint
             if (!pedidosNaoFaturados.isFaturado()) {
-            	cellSalvoNoSharepoint.setCellValue( pedidosNaoFaturados.isSalvoNoSharepoint() ? "Sim" : "Não" );
-            	// Se o pedido está faturado, subentende-se que está salvo no sharepoint
+            	cellSalvoNoSharepoint.setCellValue( pedidosNaoFaturados.isSalvoNoSharepoint() ? "Sim" : "Nao" );
+            	// Se o pedido estï¿½ faturado, subentende-se que estï¿½ salvo no sharepoint
             } else {
             	cellSalvoNoSharepoint.setCellValue("Sim");
             }
@@ -3321,10 +3322,10 @@ public class AutomacaoAdquiraExtracaoPedidos {
               
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-               System.out.println("Arquivo não encontrado!");
+               System.out.println("Arquivo nao encontrado!");
         } catch (IOException e) {
             e.printStackTrace();
-               System.out.println("Erro na edição do arquivo!");
+               System.out.println("Erro na edicao do arquivo!");
         }
 
   }
@@ -3360,7 +3361,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 
 		    	   boolean ignorarLinhas = contratoPossuiValor && frentePossuiValor && contratoSapPossuiValor;
 		    	   
-		    	   // Preciso pegar a última linha com informação, então ignoro as que tem informação
+		    	   // Preciso pegar a ï¿½ltima linha com informaï¿½ï¿½o, entï¿½o ignoro as que tem informaï¿½ï¿½o
 		    	   if (ignorarLinhas) {
 		    		   ultimaLinhaPlanilhaRelatorioIncremental = i;
 		    		   continue;		    		   
@@ -3374,8 +3375,8 @@ public class AutomacaoAdquiraExtracaoPedidos {
 		
 			} catch (FileNotFoundException e) {
 			   e.printStackTrace();
-			   System.out.println("Arquivo Excel do relatório incremental não encontrado!");
-			   throw new Exception("Arquivo Excel do relatório incremental não encontrado!");
+			   System.out.println("Arquivo Excel do relatorio incremental nao encontrado!");
+			   throw new Exception("Arquivo Excel do relatorio incremental nao encontrado!");
 			}
 		
 		return ultimaLinhaPlanilhaRelatorioIncremental;
@@ -3429,13 +3430,13 @@ public class AutomacaoAdquiraExtracaoPedidos {
                 cellComprador.setCellValue(pedidosFaturadosENaoFaturados.getComprador());
                 
                 Cell cellFaturado = row.createCell(cellnum++);
-                cellFaturado.setCellValue( pedidosFaturadosENaoFaturados.isFaturado() ? "Sim" : "Não" );
+                cellFaturado.setCellValue( pedidosFaturadosENaoFaturados.isFaturado() ? "Sim" : "Nao" );
                 
                 Cell cellSalvoNoSharepoint = row.createCell(cellnum++);
-                // Se o pedido não está faturado, mostro a informação se foi salvo no sharepoint
+                // Se o pedido nï¿½o estï¿½ faturado, mostro a informaï¿½ï¿½o se foi salvo no sharepoint
                 if (!pedidosFaturadosENaoFaturados.isFaturado()) {
-                	cellSalvoNoSharepoint.setCellValue( pedidosFaturadosENaoFaturados.isSalvoNoSharepoint() ? "Sim" : "Não" );
-                	// Se o pedido está faturado, subentende-se que está salvo no sharepoint
+                	cellSalvoNoSharepoint.setCellValue( pedidosFaturadosENaoFaturados.isSalvoNoSharepoint() ? "Sim" : "Nao" );
+                	// Se o pedido estï¿½ faturado, subentende-se que estï¿½ salvo no sharepoint
                 } else {
                 	cellSalvoNoSharepoint.setCellValue("Sim");
                 }
@@ -3459,9 +3460,9 @@ public class AutomacaoAdquiraExtracaoPedidos {
             System.out.println("Arquivo Excel editado com sucesso!");
 	    
 		} catch (FileNotFoundException e) {
-			   System.out.println("Arquivo Excel do relatório incremental não encontrado!");
+			   System.out.println("Arquivo Excel do relatorio incremental nao encontrado!");
 		} catch (IOException e) {
-		        System.out.println("Erro na edição do relatório incremental não encontrado!");
+		        System.out.println("Erro na edicao do relatorio incremental nao encontrado!");
 		}
 	
     }
@@ -3496,10 +3497,10 @@ public class AutomacaoAdquiraExtracaoPedidos {
 
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
-					System.out.println("Arquivo zip não encontrado!");
+					System.out.println("Arquivo zip nao encontrado!");
 				} catch (IOException e) {
 					e.printStackTrace();
-					System.out.println("Erro na edição do arquivo!");
+					System.out.println("Erro na edicao do arquivo!");
 				}
 
 				zipElement = zis.getNextEntry();
@@ -3580,11 +3581,11 @@ public class AutomacaoAdquiraExtracaoPedidos {
     				 
     				 if (finalCap != null && !finalCap.isEmpty()) {
     					 
-    					 // Retirando os caracteres que não forem números
+    					 // Retirando os caracteres que nï¿½o forem nï¿½meros
     					 String somenteNumeros = finalCap.replaceAll("[^0-9]", "");
     					 
-    					 // Se depois da palavra CAP tivermos números, retornaremos esse CAP seguido de números
-    					 // Se não, retornamos o CAP completo que vem da planilha do Adquira
+    					 // Se depois da palavra CAP tivermos nï¿½meros, retornaremos esse CAP seguido de nï¿½meros
+    					 // Se nï¿½o, retornamos o CAP completo que vem da planilha do Adquira
     					 if (somenteNumeros != null && !somenteNumeros.isEmpty()) {
     						 
     						 cap = finalCap;
@@ -3608,9 +3609,9 @@ public class AutomacaoAdquiraExtracaoPedidos {
     	Date date = null;
     	try {
     		
-    		// Formato que vem do excel baixado: 14-oct-2019 que é a data em espanhol
-    		// O formato abaixo parou de funcionar e não sei porque kkk
-    		// Estou então convertendo o mês para número
+    		// Formato que vem do excel baixado: 14-oct-2019 que ï¿½ a data em espanhol
+    		// O formato abaixo parou de funcionar e nï¿½o sei porque kkk
+    		// Estou entï¿½o convertendo o mï¿½s para nï¿½mero
     		// DateFormat formatter = new SimpleDateFormat("DD-MMM-YYYY", new Locale("es", "ES"));
     		
     		dataPedido = retornaDataComMesEmNumero(dataPedido);
@@ -3685,19 +3686,19 @@ public class AutomacaoAdquiraExtracaoPedidos {
     
     public static String dataDaNotaSharepoint(Date dataInclusaoNota) throws Exception {
     	
-    	//A regra para a data da nota no sharepoint é esta:
-    	//	1) Adiciona-se 75 dias à data de inclusão da nota.
-    	//	2) A data da nota no sharepoint será de acordo com os seguintes dias de vencimento: 4, 12 e 22.
-    	//	Ex: Nota incluída dia 15/10/20 + 75 dias = 29/12/2020. Neste cenário a data de vencimento da nota no sharepoint será 04/01/2021.  
+    	//A regra para a data da nota no sharepoint ï¿½ esta:
+    	//	1) Adiciona-se 75 dias ï¿½ data de inclusï¿½o da nota.
+    	//	2) A data da nota no sharepoint serï¿½ de acordo com os seguintes dias de vencimento: 4, 12 e 22.
+    	//	Ex: Nota incluï¿½da dia 15/10/20 + 75 dias = 29/12/2020. Neste cenï¿½rio a data de vencimento da nota no sharepoint serï¿½ 04/01/2021.  
     	
     	String dataDaNotaSharepoint = null;
-    	// Adicionando 75 dias na data de inclusão da nota
+    	// Adicionando 75 dias na data de inclusï¿½o da nota
 		Calendar cal = Calendar.getInstance(); 
 		cal.setTime(dataInclusaoNota); 
 		cal.add(Calendar.DATE, 75);
 		Date dataInclusaoNotaAcrescidaDe75Dias = cal.getTime();
 		
-		// Pegando dia, mês e ano da data de inclusão acrescida de 75 dias
+		// Pegando dia, mï¿½s e ano da data de inclusï¿½o acrescida de 75 dias
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.setTime(dataInclusaoNotaAcrescidaDe75Dias);
 		int dia = calendar.get(GregorianCalendar.DAY_OF_MONTH);
@@ -3727,8 +3728,8 @@ public class AutomacaoAdquiraExtracaoPedidos {
 			
 			diaVencimento = 4;
 			
-			// Neste caso do if, a data será a próxima do mês.
-			// Mas se o mês for dezembro, então o próximo mês será janeiro e o ano será o próximo.
+			// Neste caso do if, a data serï¿½ a prï¿½xima do mï¿½s.
+			// Mas se o mï¿½s for dezembro, entï¿½o o prï¿½ximo mï¿½s serï¿½ janeiro e o ano serï¿½ o prï¿½ximo.
 			// Dezembro
 			if (mes == 11) {
 				mes = 0;
@@ -3760,8 +3761,8 @@ public class AutomacaoAdquiraExtracaoPedidos {
     	// Teremos uma janela somente aberta
     	List<String> windowHandles = new ArrayList<>(driver.getWindowHandles());
     	
-    	// Embora só exista uma janela aberta nesse momento,
-    	// preciso setar o drive para esta única janela
+    	// Embora sï¿½ exista uma janela aberta nesse momento,
+    	// preciso setar o drive para esta ï¿½nica janela
     	driver.switchTo().window(windowHandles.get(0));
     	
     }
@@ -3788,10 +3789,10 @@ public class AutomacaoAdquiraExtracaoPedidos {
 			contadorErrosLogout ++;
             Thread.sleep(3000);
 	            
-	            // Tento fazer o logout por até 10 vezes
+	            // Tento fazer o logout por atï¿½ 10 vezes
 	            if (contadorErrosLogout <= 10) {
 	            	
-					System.out.println("Deu erro no método fazerLogout, tentativa de acerto: " + contadorErrosLogout);
+					System.out.println("Deu erro no metodo fazerLogout, tentativa de acerto: " + contadorErrosLogout);
 					fazerLogoutAdquira(driver, wait);
 	            
 	            } else {
@@ -3805,8 +3806,8 @@ public class AutomacaoAdquiraExtracaoPedidos {
     	
         String caminho = Util.getValor("caminho.executavel.automacao.sharepoint");
         
-        Object[] options = { "Sim", "Não" };
-        int i = JOptionPane.showOptionDialog(null, "Extração dos pedidos no Adquira executada com sucesso! \n\n Gostaria de iniciar a inserção dos pedidos no Sharepoint?", "Automatização Adquira", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        Object[] options = { "Sim", "Nao" };
+        int i = JOptionPane.showOptionDialog(null, "Extracao dos pedidos no Adquira executada com sucesso! \n\n Gostaria de iniciar a insercao dos pedidos no Sharepoint?", "Automatizacao Adquira", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
         
         if (i == JOptionPane.YES_OPTION) {
         	
@@ -3829,16 +3830,16 @@ public class AutomacaoAdquiraExtracaoPedidos {
 	    // Cria o JOptionPane por showMessageDialog
 	    JOptionPane.showMessageDialog(frame,
 	    		mensagem + erro + "", //mensagem
-	        "Automatização Adquira", // titulo da janela 
+	        "Automatizacao Adquira", // titulo da janela 
 	        JOptionPane.INFORMATION_MESSAGE);
 	    System.exit(0);
     }
     
     public static void preencherMensagemDeErroNoPedido(Pedido pedido) throws IOException {
     	
-    	String mensagemNaoEncontrouPdfAnexo = "PDF não encontrado no Adquira";
-    	String mensagemNaoEncontrouContractNumberNoPdf = "Contrato SAP não encontrado no PDF do Adquira";
-    	String mensagemNaoEncontrouContractNumberCorrespondenteComAListaDeContractNumbersDoSharepoint = "Contrato SAP não cadastrado no SharePoint";
+    	String mensagemNaoEncontrouPdfAnexo = "PDF nao encontrado no Adquira";
+    	String mensagemNaoEncontrouContractNumberNoPdf = "Contrato SAP nao encontrado no PDF do Adquira";
+    	String mensagemNaoEncontrouContractNumberCorrespondenteComAListaDeContractNumbersDoSharepoint = "Contrato SAP nao cadastrado no SharePoint";
     	
     	if (pedido != null) {
     		
@@ -3889,22 +3890,22 @@ public class AutomacaoAdquiraExtracaoPedidos {
 				    chromePreferences.put("browser.helperApps.neverAsk.saveToDisk", "text/plain, application/vnd.ms-excel, text/csv, text/comma-separated-values, application/octet-stream");
 				    chromeOptions.setExperimentalOption("prefs", chromePreferences);
 				    
-				    // Argumento que faz com que o navegador use os dados do usuário salvos
-				    // Com isso não será necessário digitar os dados de login no sharepoint, pois ele pegará as informações do usuário salvas na máquina
-				    // Um ponto importante é que não poderemos ter mais de uma sessão do Chrome aberta
-				    // Outro ponto importante é que a opção acima browser.helperApps.neverAsk.saveToDisk que permite que o browser salve um arquivo sem perguntar aonde salvar,
-				    // não funcionará por conta do trecho abaixo.
-				    // Neste caso deveremos setar manualmente essa opção no Chrome antes de rodar o robô
-				    // Será necessário fazer aparecer essa pasta no explorer do usuário
+				    // Argumento que faz com que o navegador use os dados do usuï¿½rio salvos
+				    // Com isso nï¿½o serï¿½ necessï¿½rio digitar os dados de login no sharepoint, pois ele pegarï¿½ as informaï¿½ï¿½es do usuï¿½rio salvas na mï¿½quina
+				    // Um ponto importante ï¿½ que nï¿½o poderemos ter mais de uma sessï¿½o do Chrome aberta
+				    // Outro ponto importante ï¿½ que a opï¿½ï¿½o acima browser.helperApps.neverAsk.saveToDisk que permite que o browser salve um arquivo sem perguntar aonde salvar,
+				    // nï¿½o funcionarï¿½ por conta do trecho abaixo.
+				    // Neste caso deveremos setar manualmente essa opï¿½ï¿½o no Chrome antes de rodar o robï¿½
+				    // Serï¿½ necessï¿½rio fazer aparecer essa pasta no explorer do usuï¿½rio
 				    chromeOptions.addArguments("user-data-dir=" + Util.getValor("caminho.dados.usuario.Chrome"));
 				    chromeOptions.addArguments("--lang=pt");
 
-				    // Com essa opção, o Selenium executa tudo sem mostrar o navegador
-				    // Porém no Adquira não funciona
+				    // Com essa opï¿½ï¿½o, o Selenium executa tudo sem mostrar o navegador
+				    // Porï¿½m no Adquira nï¿½o funciona
 				    //chromeOptions.addArguments("--headless");
 				    
 				    driver = new ChromeDriver(chromeOptions);
-				    // Limpa o cache usando método do driver
+				    // Limpa o cache usando mï¿½todo do driver
 				    driver.manage().deleteAllCookies();
 				    
 				    
@@ -3932,7 +3933,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 					//driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
 					
 					driver = new InternetExplorerDriver(ieOptions);
-				    // Limpa o cache usando método do driver
+				    // Limpa o cache usando mï¿½todo do driver
 				    driver.manage().deleteAllCookies();
 				
 				} else if ("Firefox".equals(Util.getValor("navegador"))) {
@@ -3941,7 +3942,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 					System.setProperty(Util.getValor("propriedade.binario.Firefox.selenium"),Util.getValor("binario.Firefox")); 
 					System.setProperty(Util.getValor("propriedade.sistema.para.driver.Firefox.selenium"),file.getAbsolutePath());
      				File profileDirectory = new File(Util.getValor("caminho.dados.usuario.Firefox"));
-				    FirefoxProfile fxProfile = new FirefoxProfile(profileDirectory);
+     				FirefoxProfile fxProfile = new FirefoxProfile(profileDirectory);
 				    fxProfile.setPreference("browser.download.folderList",2);
 				    fxProfile.setPreference("browser.download.manager.showWhenStarting",false);
 				    fxProfile.setPreference("browser.download.dir",Util.getValor("caminho.download.relatorios"));
@@ -3958,7 +3959,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 				    FirefoxOptions fxOptions = new FirefoxOptions();
 				    fxOptions.setProfile(fxProfile);
 				    driver = new FirefoxDriver(fxOptions);
-				    // Limpa o cache usando método do driver
+				    // Limpa o cache usando mï¿½todo do driver
 				    driver.manage().deleteAllCookies();
 				}
 			
@@ -3998,9 +3999,9 @@ public class AutomacaoAdquiraExtracaoPedidos {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 		writer.write(mensagem + conteudoArquivo);
 		writer.newLine();
-		//Criando o conteúdo do arquivo
+		//Criando o conteï¿½do do arquivo
 		writer.flush();
-		//Fechando conexão e escrita do arquivo.
+		//Fechando conexï¿½o e escrita do arquivo.
 		writer.close();
 		
     }

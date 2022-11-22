@@ -41,7 +41,7 @@ public class Pdf {
 			 }
 			
 		 } catch (Exception e) {
-				throw new Exception("Ocorreu um erro no método retornaConteudoPedido: " + e);
+				throw new Exception("Ocorreu um erro no mï¿½todo retornaConteudoPedido: " + e);
 		}
 		 
 		 return pdfFileInText;
@@ -84,7 +84,7 @@ public class Pdf {
 			 return somenteNumerosContractNumber;
 			
 		} catch (Exception e) {
-			throw new Exception("Ocorreu um erro no método retornaNumeroContractNumber: " + e);
+			throw new Exception("Ocorreu um erro no metodo retornaNumeroContractNumber: " + e);
 		}
 		 
 		 
