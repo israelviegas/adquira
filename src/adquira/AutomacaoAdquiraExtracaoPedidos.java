@@ -416,7 +416,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 			
 		} catch (Exception e) {
 			contadorExecutaAutomacaoAdquiraSharepoint ++;
-			// Executo at� 10 vezes se der erro no executaAutomacaoAdquiraSharepoint
+			// Executo ate 10 vezes se der erro no executaAutomacaoAdquiraSharepoint
 			if (contadorExecutaAutomacaoAdquiraSharepoint <= 10) {
 				
 				System.out.println("Deu erro no metodo executaAutomacaoAdquiraSharepoint, tentativa de acerto: " + contadorExecutaAutomacaoAdquiraSharepoint);
@@ -2835,16 +2835,23 @@ public class AutomacaoAdquiraExtracaoPedidos {
 			
 			for (String numeroContractNumberDistinto : listaNumerosContractNumbersDistintos) {
 				
-				if (listaContractNumbersTemporaria != null && !listaContractNumbersTemporaria.isEmpty()) {
+				if (numeroContractNumberDistinto != null && !numeroContractNumberDistinto.isEmpty()) {
 					
-					for (ContractNumber contractNumber : listaContractNumbersTemporaria) {
+					if (listaContractNumbersTemporaria != null && !listaContractNumbersTemporaria.isEmpty()) {
 						
-						if (numeroContractNumberDistinto.equals(contractNumber.getNumero())) {
-							listaContractNumbers.add(contractNumber);
-							break;
+						for (ContractNumber contractNumber : listaContractNumbersTemporaria) {
+							
+							if (contractNumber != null) {
+								
+								if (numeroContractNumberDistinto.equals(contractNumber.getNumero())) {
+									listaContractNumbers.add(contractNumber);
+									break;
+								}
+							}
+							
 						}
-						
 					}
+
 				}
 				
 			}
@@ -3038,7 +3045,8 @@ public class AutomacaoAdquiraExtracaoPedidos {
     				pedidoAzul.setListaCap(listaCap);
 
     				if (!"CANCELADO".equalsIgnoreCase(pedidoAzul.getEstado()) && pedidoAzul.getPrazoPagamento().contains("M75") ||
-    						!"CANCELADO".equalsIgnoreCase(pedidoAzul.getEstado()) && pedidoAzul.getPrazoPagamento().contains("M60")) {
+    					!"CANCELADO".equalsIgnoreCase(pedidoAzul.getEstado()) && pedidoAzul.getPrazoPagamento().contains("ME75") ||
+    					!"CANCELADO".equalsIgnoreCase(pedidoAzul.getEstado()) && pedidoAzul.getPrazoPagamento().contains("M60")) {
     				   
     				   listaPedidos.add(pedidoAzul);
     			   }
