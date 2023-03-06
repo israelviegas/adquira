@@ -71,9 +71,9 @@ public class AutomacaoAdquiraExtracaoPedidos {
 	private static String nomeZipBaixado;
 	private static boolean extracaoPossuiPedidos;
 	private static boolean existemPedidos = false;
-	private static String dataAtual = new SimpleDateFormat("yyyy_MM_dd HH_mm_ss").format(new Date());
-	private static String dataAtualPlanilhaFinal = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
-	private static String dataAtualSharepoint = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
+	private static String dataAtual = null;
+	private static String dataAtualPlanilhaFinal = null;
+	private static String dataAtualSharepoint = null;
 	private static String diretorioLogs = "";
 	private static String subdiretorioPdfsBaixados = "";
 	private static List<ContractNumber> listaContractNumbers = null;
@@ -108,53 +108,69 @@ public class AutomacaoAdquiraExtracaoPedidos {
 	@SuppressWarnings("unused")
 	public static void main(String[] args) throws Exception {
 		
-		WebDriver driver = null;
-
-    		try {
-    			
-    			diretorioLogs = Util.getValor("caminho.diretorio.relatorios") + "/" + dataAtual;
-    			diretorioRelatorio = Util.getValor("caminho.download.relatorios") + "\\" + dataAtual;
-    			subdiretorioRelatoriosBaixados = diretorioRelatorio + "\\" + "relatorios baixados " + dataAtual;
-    			subdiretorioRelatoriosBaixados2 = diretorioLogs + "/" + "relatorios baixados " + dataAtual;
-    			subdiretorioRelatorioFinal = diretorioRelatorio + "\\" + "relatorio final " + dataAtual;
-    			subdiretorioRelatorioFinal2  = diretorioRelatorio + "/" + "relatorio final " + dataAtual;
-    			subdiretorioRelatorioIncremental = Util.getValor("caminho.diretorio.relatorio.incremental");   
-    			subdiretorioPdfsBaixados  = diretorioRelatorio + "\\" + "pdfs baixados " + dataAtual;
-    			subdiretorioPdfsBaixados2  = diretorioRelatorio + "/" + "pdfs baixados " + dataAtual;
-    			caminhoExecutavelPlanilhaContractNumbers = Util.getValor("caminho.executavel.planilha.contract.numbers");
-    			caminhoExecutavelPlanilhaPedidosFaturados = Util.getValor("caminho.executavel.planilha.pedidos.faturados");
-    			criaDiretorio(subdiretorioRelatoriosBaixados);
-    			criaDiretorio(subdiretorioRelatorioFinal);
-    			criaDiretorio(subdiretorioRelatorioIncremental);
-    			criaDiretorio(subdiretorioPdfsBaixados);
-    			
-    			// Deleta os diret�rios que possu�rem data de cria��o anterior � data de 7 dias atr�s
-    			apagaDiretoriosDeRelatorios(Util.getValor("caminho.download.relatorios"));
-    			
-    			// As vezes o diret�rio que armazena dados tempor�rios do Chome simplesmente some, da� o Selenium d� pau na hora de chamar o browser
-    			// Com o m�todo abaixo, crio essa pasta se ela n�o existir
-    			criaDiretorioTemp();
-    			
-    			executaAutomacaoAdquiraSharepoint(driver);
-            
-    		} catch (Exception e) {
-    			gravarArquivo(diretorioLogs, "Erro Adquira" + " " + dataAtual, ".txt", e.getMessage(), "Ocorreu um erro na automacao de extracao de pedidos: ");
-    			inserirStatusExecucaoNoBanco("Adquira", dataAtualPlanilhaFinal, "Erro de execucao do robo");
-    		} finally {
-    			//mensagemErro("Houve um problema na extra��o dos pedidos no Adquira\n");
-    			//fazerLogout(wait);
-    			if (driver != null) {
-    				driver.quit();
-    			}
-    			
-    			mataProcessosGoogle();
-    			mataProcessosFirefox();
-				
-			}
+		String usernameSP = Util.getValor("usernameSP");
+		String senhaSP = Util.getValor("senhaSP");
+		automacaoAdquiraSharepoint(usernameSP, senhaSP);
+		
+		String usernameSBC = Util.getValor("usernameSBC");
+		String senhaSBC = Util.getValor("senhaSBC");
+		automacaoAdquiraSharepoint(usernameSBC, senhaSBC);
+		
     		
 	}
 	
-    public static void executaAutomacaoAdquiraSharepoint(WebDriver driver) throws Exception{
+	public static void automacaoAdquiraSharepoint(String usuario, String senha) throws Exception{
+		
+		WebDriver driver = null;
+		
+		try {
+			
+			dataAtual = new SimpleDateFormat("yyyy_MM_dd HH_mm_ss").format(new Date());
+			dataAtualPlanilhaFinal = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
+			dataAtualSharepoint = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
+			diretorioLogs = Util.getValor("caminho.diretorio.relatorios") + "/" + dataAtual;
+			diretorioRelatorio = Util.getValor("caminho.download.relatorios") + "\\" + dataAtual;
+			subdiretorioRelatoriosBaixados = diretorioRelatorio + "\\" + "relatorios baixados " + dataAtual;
+			subdiretorioRelatoriosBaixados2 = diretorioLogs + "/" + "relatorios baixados " + dataAtual;
+			subdiretorioRelatorioFinal = diretorioRelatorio + "\\" + "relatorio final " + dataAtual;
+			subdiretorioRelatorioFinal2  = diretorioRelatorio + "/" + "relatorio final " + dataAtual;
+			subdiretorioRelatorioIncremental = Util.getValor("caminho.diretorio.relatorio.incremental");   
+			subdiretorioPdfsBaixados  = diretorioRelatorio + "\\" + "pdfs baixados " + dataAtual;
+			subdiretorioPdfsBaixados2  = diretorioRelatorio + "/" + "pdfs baixados " + dataAtual;
+			caminhoExecutavelPlanilhaContractNumbers = Util.getValor("caminho.executavel.planilha.contract.numbers");
+			caminhoExecutavelPlanilhaPedidosFaturados = Util.getValor("caminho.executavel.planilha.pedidos.faturados");
+			criaDiretorio(subdiretorioRelatoriosBaixados);
+			criaDiretorio(subdiretorioRelatorioFinal);
+			criaDiretorio(subdiretorioRelatorioIncremental);
+			criaDiretorio(subdiretorioPdfsBaixados);
+			
+			// Deleta os diret�rios que possu�rem data de cria��o anterior � data de 7 dias atr�s
+			apagaDiretoriosDeRelatorios(Util.getValor("caminho.download.relatorios"));
+			
+			// As vezes o diret�rio que armazena dados tempor�rios do Chome simplesmente some, da� o Selenium d� pau na hora de chamar o browser
+			// Com o m�todo abaixo, crio essa pasta se ela n�o existir
+			criaDiretorioTemp();
+			
+			executaAutomacaoAdquiraSharepoint(driver, usuario, senha);
+			
+		} catch (Exception e) {
+			gravarArquivo(diretorioLogs, "Erro Adquira" + " " + dataAtual, ".txt", e.getMessage(), "Ocorreu um erro na automacao de extracao de pedidos: ");
+			inserirStatusExecucaoNoBanco("Adquira", dataAtualPlanilhaFinal, "Erro de execucao do robo");
+		} finally {
+			//mensagemErro("Houve um problema na extra��o dos pedidos no Adquira\n");
+			//fazerLogout(wait);
+			if (driver != null) {
+				driver.quit();
+			}
+			
+			mataProcessosGoogle();
+			mataProcessosFirefox();
+			
+		}
+	
+	}
+	
+    public static void executaAutomacaoAdquiraSharepoint(WebDriver driver, String usuario, String senha) throws Exception{
     	
     	try {
     		
@@ -202,7 +218,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		criaListaContractNumbersDistintos();
     		
     		// Faz login no Adquira
-    		fazerLoginAdquira(driver, wait, js);
+    		fazerLoginAdquira(driver, wait, js, usuario, senha);
     		
     		//acessarPaginaInicial(driver, wait);
     		
@@ -219,16 +235,16 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		listaContractNumbers.add(contractNumberTeste);
     		*/
     		
-    		fazerDownlodRelatorioPorPeriodo(driver, wait, js);
+    		fazerDownlodRelatorioPorPeriodo(driver, wait, js, usuario, senha);
     		
     		if (extracaoPossuiPedidos) {
     			existemPedidos = true;
     			//Move o relat�rio baixado do diret�rio relatorios para o diret�rio correto
-    			moverArquivosEntreDiretorios(driver, wait, js, Util.getValor("caminho.download.relatorios") + "\\" + nomeRelatorioBaixado, subdiretorioRelatoriosBaixados);
+    			moverArquivosEntreDiretorios(driver, wait, js, Util.getValor("caminho.download.relatorios") + "\\" + nomeRelatorioBaixado, subdiretorioRelatoriosBaixados, usuario, senha);
     			Thread.sleep(5000);
     			
     			// L� o relat�rio baixado
-    			lerRelatorioExcel(driver, wait, js, subdiretorioRelatoriosBaixados2 + "/" + nomeRelatorioBaixado, subdiretorioRelatoriosBaixados);
+    			lerRelatorioExcel(driver, wait, js, subdiretorioRelatoriosBaixados2 + "/" + nomeRelatorioBaixado, subdiretorioRelatoriosBaixados, usuario, senha);
     			
     		}
     		
@@ -268,7 +284,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     					
     					for (Pedido pedidoNaoFaturado: listaPedidosNaoFaturados) {
     						
-    						fazerDownlodPdfPedidoMoveArquivosEDescompacta(driver, wait, js, pedidoNaoFaturado, subdiretorioPdfsBaixados2);
+    						fazerDownlodPdfPedidoMoveArquivosEDescompacta(driver, wait, js, pedidoNaoFaturado, subdiretorioPdfsBaixados2, usuario, senha);
     						
     						if (pedidoNaoFaturado.isEncontrouPdfAnexo()) {
     							encontrarContractNumberNoPdfDoPedido(driver, wait, js, pedidoNaoFaturado, subdiretorioPdfsBaixados2);
@@ -416,11 +432,11 @@ public class AutomacaoAdquiraExtracaoPedidos {
 			
 		} catch (Exception e) {
 			contadorExecutaAutomacaoAdquiraSharepoint ++;
-			// Executo ate 10 vezes se der erro no executaAutomacaoAdquiraSharepoint
-			if (contadorExecutaAutomacaoAdquiraSharepoint <= 10) {
+			// Executo ate 5 vezes se der erro no executaAutomacaoAdquiraSharepoint
+			if (contadorExecutaAutomacaoAdquiraSharepoint <= 5) {
 				
 				System.out.println("Deu erro no metodo executaAutomacaoAdquiraSharepoint, tentativa de acerto: " + contadorExecutaAutomacaoAdquiraSharepoint);
-				executaAutomacaoAdquiraSharepoint(driver);
+				executaAutomacaoAdquiraSharepoint(driver, usuario, senha);
 			
 			} else {
 				throw new Exception("Ocorreu um erro no m�todo executaAutomacaoAdquiraSharepoint: " + e);
@@ -486,7 +502,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
         }
     }
     
-    public static void moverArquivosEntreDiretorios(WebDriver driver, WebDriverWait wait, JavascriptExecutor js, String caminhoArquivoOrigem, String caminhoDiretorioDestino) throws Exception{
+    public static void moverArquivosEntreDiretorios(WebDriver driver, WebDriverWait wait, JavascriptExecutor js, String caminhoArquivoOrigem, String caminhoDiretorioDestino, String usuario, String senha) throws Exception{
     	
     	boolean sucesso = true;
     	File arquivoOrigem = new File(caminhoArquivoOrigem);
@@ -506,10 +522,10 @@ public class AutomacaoAdquiraExtracaoPedidos {
 				// O bot�o de logout est� ficando escondido
 				// ent�o retirarei o logout e o login por enquanto
 				fazerLogoutAdquira(driver, wait);
-				fazerLoginAdquira(driver, wait, js);
+				fazerLoginAdquira(driver, wait, js, usuario, senha);
 				//acessarPaginaInicial(driver, wait);
-				fazerDownlodRelatorioPorPeriodo(driver, wait, js);
-				moverArquivosEntreDiretorios(driver, wait, js, caminhoArquivoOrigem, caminhoDiretorioDestino);
+				fazerDownlodRelatorioPorPeriodo(driver, wait, js, usuario, senha);
+				moverArquivosEntreDiretorios(driver, wait, js, caminhoArquivoOrigem, caminhoDiretorioDestino, usuario, senha);
             
             } else {
             	throw new Exception("Ocorreu um erro no momento de mover o relat�rio " + caminhoArquivoOrigem + " para " + caminhoDiretorioDestino);
@@ -1922,14 +1938,14 @@ public class AutomacaoAdquiraExtracaoPedidos {
     
     
     // Op��o de Ver Notifica��es
-    public static void fazerLogoutAdquiraDepoisLoginDepoisBuscaAvancadaDepoisRestabeleceFiltros(WebDriver driver, WebDriverWait wait, JavascriptExecutor js) throws Exception  {
+    public static void fazerLogoutAdquiraDepoisLoginDepoisBuscaAvancadaDepoisRestabeleceFiltros(WebDriver driver, WebDriverWait wait, JavascriptExecutor js, String usuario, String senha) throws Exception  {
 		
 		// Est� dando erro de logout no servidor
 		// O bot�o de logout est� ficando escondido
 		// ent�o retirarei o logout e o login por enquanto
 		fazerLogoutAdquira(driver, wait);
 		
-    	fazerLoginAdquira(driver, wait, js);
+    	fazerLoginAdquira(driver, wait, js, usuario, senha);
     	
     	//acessarPaginaInicial(driver, wait);
 	    
@@ -1982,7 +1998,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     	
     }
     
-    public static void fazerDownlodPdfPedidoMoveArquivosEDescompacta(WebDriver driver, WebDriverWait wait, JavascriptExecutor js, Pedido pedidoNaoFaturado, String subdiretorioPdfsBaixados2  ) throws IOException, Exception {
+    public static void fazerDownlodPdfPedidoMoveArquivosEDescompacta(WebDriver driver, WebDriverWait wait, JavascriptExecutor js, Pedido pedidoNaoFaturado, String subdiretorioPdfsBaixados2, String usuario, String senha  ) throws IOException, Exception {
 		
 		try {
 			
@@ -2017,11 +2033,11 @@ public class AutomacaoAdquiraExtracaoPedidos {
 				// ent�o retirarei o logout e o login por enquanto
 				fazerLogoutAdquira(driver, wait);
 				
-				fazerLoginAdquira(driver, wait, js);
+				fazerLoginAdquira(driver, wait, js, usuario, senha);
 				
 				//acessarPaginaInicial(driver, wait);
 				
-				fazerDownlodPdfPedidoMoveArquivosEDescompacta(driver, wait, js, pedidoNaoFaturado, subdiretorioPdfsBaixados2);
+				fazerDownlodPdfPedidoMoveArquivosEDescompacta(driver, wait, js, pedidoNaoFaturado, subdiretorioPdfsBaixados2, usuario, senha);
 
 			}
 			//Aqui n�o vou colocar o else para dar um throw new Exception porque percebi que existem pedidos repetidos.
@@ -2049,7 +2065,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     }
 
 
-    public static void fazerDownlodRelatorioPorPeriodo(WebDriver driver, WebDriverWait wait, JavascriptExecutor js) throws Exception  { 
+    public static void fazerDownlodRelatorioPorPeriodo(WebDriver driver, WebDriverWait wait, JavascriptExecutor js, String usuario, String senha) throws Exception  { 
     	
     	try {
     		
@@ -2204,9 +2220,9 @@ public class AutomacaoAdquiraExtracaoPedidos {
 				// O bot�o de logout est� ficando escondido
 				// ent�o retirarei o logout e o login por enquanto
 				fazerLogoutAdquira(driver, wait);
-				fazerLoginAdquira(driver, wait, js);
+				fazerLoginAdquira(driver, wait, js, usuario, senha);
 				//acessarPaginaInicial(driver, wait);
-				fazerDownlodRelatorioPorPeriodo(driver, wait, js);
+				fazerDownlodRelatorioPorPeriodo(driver, wait, js, usuario, senha);
 			
 			} else {
 	        	throw new Exception("Ocorreu um erro no momento de fazer o download do relatorio por periodo: " + e2);
@@ -2235,7 +2251,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 
     }
     
-    public static void aplicarFiltro (WebDriver driver, WebDriverWait wait, JavascriptExecutor js, String contractNumber ) throws Exception {
+    public static void aplicarFiltro (WebDriver driver, WebDriverWait wait, JavascriptExecutor js, String contractNumber, String usuario, String senha ) throws Exception {
     	
     	preencherCamposFiltro(driver, wait, contractNumber);
     	
@@ -2285,7 +2301,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
     			
     			// Fa�o o logout, depois o login depois entro na busca avan�ada e por fim restabele�o filtros
     			// Dessa forma, descobri que o campo Nome volta a funcionar preenchendo a palavra contract number
-    			fazerLogoutAdquiraDepoisLoginDepoisBuscaAvancadaDepoisRestabeleceFiltros(driver, wait, js);
+    			fazerLogoutAdquiraDepoisLoginDepoisBuscaAvancadaDepoisRestabeleceFiltros(driver, wait, js, usuario, senha);
     			
     			// Op��o de Datos Adicionales
             	// Se for utilizar o m�todo buscaAvancadaComUrl, a Op��o de Datos Adicionales ter� o id TID_CONTENTPANEL_supplier_SupplierWelcomePanel_CUSTOMFIELD_EXTRINSICDATA_ICONBUTTON_ICON_EDIT
@@ -2297,7 +2313,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 					waitbotaoDatosAdicionales.until(ExpectedConditions.elementToBeClickable(By.id("TID_CONTENTPANEL_supplier_SupplierAdvancedSearchPanel_CUSTOMFIELD_EXTRINSICDATA_ICONBUTTON_ICON_EDIT"))).click();
 				}
     			Thread.sleep(3000);
-    			aplicarFiltro(driver, wait, js, contractNumber);
+    			aplicarFiltro(driver, wait, js, contractNumber, usuario, senha);
     		
     		}
     		
@@ -2600,7 +2616,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 		
     }
     
-    public static void fazerLoginAdquira(WebDriver driver, WebDriverWait wait, JavascriptExecutor js) throws Exception {
+    public static void fazerLoginAdquira(WebDriver driver, WebDriverWait wait, JavascriptExecutor js, String usuario, String senha) throws Exception {
     	
     	try {
     		
@@ -2613,14 +2629,14 @@ public class AutomacaoAdquiraExtracaoPedidos {
     		String idLogin = "//input[@id='campo-usuario']";
     		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(idLogin)));
     		WebElement username = driver.findElement(By.xpath(idLogin));
-    		username.sendKeys(Util.getValor("username"));
+    		username.sendKeys(usuario);
     		Thread.sleep(1000);
     		
             // Preenchendo os dados da senha
     		String idSenha = "//input[@id='campo-contrasena']";
     		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(idSenha)));
-            WebElement senha = driver.findElement(By.xpath(idSenha));
-            senha.sendKeys(Util.getValor("senha"));
+            WebElement password = driver.findElement(By.xpath(idSenha));
+            password.sendKeys(senha);
             Thread.sleep(1000);
 
             // Fazendo login
@@ -2647,7 +2663,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 	            	
 					System.out.println("Deu erro no metodo fazerLogin, tentativa de acerto: " + contadorErrosLogin);
 					fazerLogoutAdquira(driver, wait);
-					fazerLoginAdquira(driver, wait, js);
+					fazerLoginAdquira(driver, wait, js, usuario, senha);
 	            
 	            } else {
 	         	   throw new Exception("Erro no Login: " + e);
@@ -2861,7 +2877,7 @@ public class AutomacaoAdquiraExtracaoPedidos {
 	}
 	
     @SuppressWarnings("resource")
-	public static void lerRelatorioExcel(WebDriver driver, WebDriverWait wait, JavascriptExecutor js, String relatorio, String subdiretorioRelatoriosBaixados) throws Exception {
+	public static void lerRelatorioExcel(WebDriver driver, WebDriverWait wait, JavascriptExecutor js, String relatorio, String subdiretorioRelatoriosBaixados, String usuario, String senha) throws Exception {
 
         try {
                FileInputStream arquivo = new FileInputStream(new File(
@@ -2993,11 +3009,11 @@ public class AutomacaoAdquiraExtracaoPedidos {
 				// O bot�o de logout est� ficando escondido
 				// ent�o retirarei o logout e o login por enquanto
 				fazerLogoutAdquira(driver, wait);
-				fazerLoginAdquira(driver, wait, js);
+				fazerLoginAdquira(driver, wait, js, usuario, senha);
 				//acessarPaginaInicial(driver, wait);
-				fazerDownlodRelatorioPorPeriodo(driver, wait, js);
-				moverArquivosEntreDiretorios(driver, wait, js, Util.getValor("caminho.download.relatorios") + "\\" + nomeRelatorioBaixado, subdiretorioRelatoriosBaixados);
-         	    lerRelatorioExcel(driver, wait, js, relatorio, subdiretorioRelatoriosBaixados);
+				fazerDownlodRelatorioPorPeriodo(driver, wait, js, usuario, senha);
+				moverArquivosEntreDiretorios(driver, wait, js, Util.getValor("caminho.download.relatorios") + "\\" + nomeRelatorioBaixado, subdiretorioRelatoriosBaixados, usuario, senha);
+         	    lerRelatorioExcel(driver, wait, js, relatorio, subdiretorioRelatoriosBaixados, usuario, senha);
             
             } else {
          	   throw new Exception("Arquivo Excel nao encontrado! : " + e);
