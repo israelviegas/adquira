@@ -3806,7 +3806,11 @@ public class AutomacaoAdquiraExtracaoPedidos {
         	
     	    fecharMensagemVerNotificacoes(driver);
     		
-    		wait.until(ExpectedConditions.elementToBeClickable(By.id("TID_USERBAR_BUTTON_LOG_OUT"))).click();
+    		wait.until(ExpectedConditions.elementToBeClickable(By.id("TID_USERBAR_BUTTON_USER_MENU"))).click();
+    		Thread.sleep(3000);
+    		
+    		String textoCerrarSession = "Cerrar sesión";
+    		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span [text()='"+textoCerrarSession+"']"))).click();
     		Thread.sleep(3000);
     		
 		} catch (Exception e) {
